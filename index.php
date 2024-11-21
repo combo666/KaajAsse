@@ -6,24 +6,9 @@
     }
     
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
 <?php include('conf/database/db_connect.php'); ?>
 
-    <?php
-        if(!isset($_SESSION['uname'])){
-            echo $_SESSION['uname'];
-            ?>
-    <?php
-        }
-    ?>
-</body>
-</html>
+<?php include('examples/header.php'); ?>
+
+<?php include('examples/navbar.php'); ?>
+<?php include('examples/footer.php'); ?>
