@@ -11,4 +11,5 @@
 <?php include('examples/header.php'); ?>
 
 <?php include('examples/navbar.php'); ?>
+
 <?php include('examples/footer.php'); ?>
