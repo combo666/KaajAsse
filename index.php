@@ -1,3 +1,13 @@
+<?php
+    session_start();
+    if(isset($_SESSION['uname'])){
+        $uname = $_SESSION['uname'];
+        // echo "jidisjd";
+    }
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +16,14 @@
     <title>Document</title>
 </head>
 <body>
-    
+<?php include('conf/database/db_connect.php'); ?>
+
+    <?php
+        if(!isset($_SESSION['uname'])){
+            echo $_SESSION['uname'];
+            ?>
+    <?php
+        }
+    ?>
 </body>
 </html>
