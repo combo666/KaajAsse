@@ -1,20 +1,23 @@
 <div class="navbar">
     <div class="nav-item">
-        <i class="fa-solid fa-table-columns"></i>
+    <i class="fa-solid fa-border-all"></i>
     </div>
     <div class="nav-item">
-        <img src="/assets/img/home.png" alt="Home">
+    <i class="fa-solid fa-people-group"></i>
     </div>
     <div class="nav-item">
-        <img src="/assets/img/list.png" alt="List">
+    <i class="fa-solid fa-list-check"></i>
     </div>
     <div class="nav-item">
-        <img src="/assets/img/calendar.png" alt="Calendar">
+    <i class="fa-regular fa-calendar-check"></i>
     </div>
     <div class="nav-item">
-        <img src="/assets/img/analytics.png" alt="Analytics">
+    <i class="fa-solid fa-chart-line"></i>
     </div>
     <div class="nav-item">
-        <img src="/assets/img/profile.png" alt="Profile">
+    <i class="fa-solid fa-ranking-star"></i>
+    </div>
+    <div class="nav-item">
+    <i class="fa-regular fa-user"></i>
     </div>
 </div>
