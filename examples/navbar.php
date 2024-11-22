@@ -1,20 +1,30 @@
-<div class="navbar">
-    <div class="nav-item">
-        <i class="fa-solid fa-table-columns"></i>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar at Bottom</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Content Goes Here</h1>
+        </div>
+        <div class="navbar">
+            <div class="nav-item">
+                <img src="icon1.png" alt="Icon 1">
+            </div>
+            <div class="nav-item">
+                <img src="icon2.png" alt="Icon 2">
+            </div>
+            <div class="nav-item">
+                <img src="icon3.png" alt="Icon 3">
+            </div>
+            <div class="nav-item">
+                <img src="icon4.png" alt="Icon 4">
+            </div>
+        </div>
     </div>
-    <div class="nav-item">
-        <img src="/assets/img/home.png" alt="Home">
-    </div>
-    <div class="nav-item">
-        <img src="/assets/img/list.png" alt="List">
-    </div>
-    <div class="nav-item">
-        <img src="/assets/img/calendar.png" alt="Calendar">
-    </div>
-    <div class="nav-item">
-        <img src="/assets/img/analytics.png" alt="Analytics">
-    </div>
-    <div class="nav-item">
-        <img src="/assets/img/profile.png" alt="Profile">
-    </div>
-</div>
+</body>
+</html>

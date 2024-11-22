@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background: #FAF5E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.left-section {
+    width: 50%; 
+    background: linear-gradient(to bottom, #3fada8, #67eaca); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    color: white;
+    text-align: center;
+    padding: 20px;
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    word-wrap: break-word; 
+    box-sizing: border-box; 
+    min-height: 100%; 
+}
+
+.left-section h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    width: 100%;
+}
+
+.left-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    word-wrap: break-word; 
+    overflow: hidden; 
+}
+
+.left-section img {
+    width: 150px;
+    margin-top: 20px;
+}
+
+.right-section {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1e1e2f;
+}
+
+.signin-box {
+    position: relative;
+    width: 350px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 2;
+}
+
+.toggle-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    margin-bottom: 20px;
+    height: 40px;
+}
+
+#btn {
+    position: absolute;
+    width: 50%;
+    height: 40px;
+    background: linear-gradient(to bottom, #28d7cec5, #41d4afd3);
+    border-radius: 30px;
+    transition: left 0.5s ease;
+    top: 0;
+    left: 0; 
+    z-index: 1;
+}
+
+
+.toggle-btn {
+    width: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s ease;
+    outline: none;
+    position: relative;
+}
+
+.toggle-btn:hover {
+    color: #555;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(51, 51, 51, 0.5);
+}
+
+.form-group label {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px; 
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.form-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.form-group label a {
+    color: #00BFFF;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.form-group label a:hover {
+    text-decoration: underline;
+}
+
+.signin-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(to bottom, #23b9b1bc, #42ccaad3);
+    border-radius: 30px;
+    border: none;
+    border-radius: 3px;
+    color: rgba(255, 255, 255, 0.855);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.signin-btn:hover {
+    background: #0cb9b9;
+}
+
+.bandage {
+    width: 140px; 
+    height: 35px; 
+    background: rgba(94, 93, 88, 0.542);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+    background-size: 12px 12px; /*size of dots */
+    position: absolute;
+    z-index: 10; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transform-origin: center;
+    opacity: 0.9; 
+    border-radius: 10px;
+}
+
+.bandage-top-left {
+    top: -20px; 
+    left: -50px; 
+    transform: rotate(-25deg); 
+}
+
+.bandage-top-right {
+    top: -10px; 
+    right: -60px;
+    transform: rotate(40deg); 
+}
