@@ -42,7 +42,7 @@ body {
     transform: translateX(-50%); 
     z-index: 1000; 
     margin: 0;
-    margin-bottom: 35px;
+    margin-bottom: 50px;
 }
 
 .nav-item {

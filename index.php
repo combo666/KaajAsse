@@ -8,11 +8,11 @@
 ?>
 <?php include('conf/database/db_connect.php'); ?>
 
-<?php include('examples/header.php'); ?>
+<?php include('./examples/includes/header.php'); ?>
 
 
 <h1>Add your contents inside this container</h1>
 
-<?php include('examples/navbar.php'); ?>
+<?php include('./examples/includes/navbar.php'); ?>
 
-<?php include('examples/footer.php'); ?>
+<?php include('./examples/includes/footer.php'); ?>
