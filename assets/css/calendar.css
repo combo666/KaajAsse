@@ -4,10 +4,7 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-body {
-    background-color: #FFFFFF;
-    margin: 0;
+    
 }
 .navtop {
     background-color: #3b4656;
@@ -77,14 +74,25 @@ body {
 }
 .calendar .days .day_name {
     width: calc(100% / 7);
-    border-right: 1px solid #2c7aca;
+    border-right: 1px solid #656565;
     padding: 20px;
     text-transform: uppercase;
     font-size: 12px;
     font-weight: bold;
     color: #818589;
     color: #fff;
-    background-color: #448cd6;
+    background-color: #656565;
+}
+.calendar .days .day_name-Fri {
+    width: calc(100% / 7);
+    border-right: 1px solid #656565;
+    padding: 20px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+    color: #818589;
+    color: #fff;
+    background-color: #656565;
 }
 .calendar .days .day_name:nth-child(7) {
     border: none;

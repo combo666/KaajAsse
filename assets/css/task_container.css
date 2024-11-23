@@ -1,0 +1,75 @@
+.parent {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+    
+    .div1 { grid-area: 1 / 1 / 8 / 10; }
+    .div2 { grid-area: 1 / 10 / 11 / 13; }
+    .div3 { grid-area: 8 / 1 / 11 / 10; }
+
+    .task_container{
+        margin: 30px;
+        margin-top: 67px;
+    }
+    .task_header{
+        background-color: #656565;
+        padding: 10px;
+        border-style: solid;
+        border-color: black;
+        border-width: 1.5px;
+        border-radius: 8px;
+        color: aliceblue;
+    }
+    .tasks_bg{
+        background-color: #EFE9E8;
+        margin-top: 12px;
+        padding: 12px;
+        border-style: solid;
+        border-color: black;
+        border-width: 1.5px ;
+        border-radius: 8px;
+    }
+    .task_card{
+        background-color: #D3CFC3;
+        margin-bottom: 12px;
+        padding: 12px;
+        border-style: solid;
+        border-color: black;
+        border-width: 1.5px ;
+        max-height: 170px;
+        overflow: hidden;
+        border-radius: 8px;
+
+    }
+    .dot_priority{
+        height: 15px;
+        width: 15px;
+        background-color: #ff0000;
+        border-radius: 50%;
+        display: inline-block;
+        border-style: solid;
+        border-color: black;
+        border-width: 1.5px ;
+    }
+    .date{
+        margin: 0px;
+        margin-left: 5px;
+        background-color: #E9ECEF;
+        padding: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 5px;
+    }
+    .task_name{
+        font-size: large;
+        font: bold;
+        margin: 8px;
+    }
+    .task_note{
+        font: bold;
+        margin: 8px;
+        color: #495057;
+    }
