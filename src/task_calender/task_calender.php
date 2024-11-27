@@ -13,7 +13,7 @@ $calendar->add_event('Holiday', '2024-05-16', 7);
 <div class="parent">
 <div class="div1"> <?=$calendar?> </div>
 <div class="div2"> <?php include('todays_task.php')  ?> </div>
-<div class="div3"> </div>
+<div class="div3"> <?php include('team_members.php')  ?> </div>
 </div>
 
 
