@@ -13,6 +13,17 @@
 
 <h1>Add your contents inside this container</h1>
 
+<?php
+
+    $query = "SELECT * FROM KaajAsse.user;";
+
+    $stmt = mysqli_query($connect, $query);
+    while($row = mysqli_fetch_array($stmt, MYSQLI_ASSOC)){
+        echo $row['user_id'];
+    }
+
+?>
+
 <?php include('./examples/includes/navbar.php'); ?>
 
 <?php include('./examples/includes/footer.php'); ?>

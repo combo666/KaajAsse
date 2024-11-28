@@ -2,7 +2,6 @@
 * {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
-    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     
@@ -61,14 +60,17 @@
 
 .calendar {
     display: flex;
+    border-color: #51ce57;
+    padding: 20px;
     flex-flow: column;
     margin-left: 30px;
+    border-radius: 20px;
 }
 .calendar .header .month-year {
-    font-size: 20px;
+    font-size: 40px;
     font-weight: bold;
-    color: #636e73;
-    padding: 20px 0;
+    color: #818589;
+    padding: 10px 0;
 }
 .calendar .days {
     display: flex;
@@ -76,23 +78,13 @@
 }
 .calendar .days .day_name {
     width: calc(100% / 7);
-    border-right: 1px solid #656565;
+    border-right: 1px dashed #000000;
+    border-bottom: 3px solid #000000;
     padding: 20px;
     text-transform: uppercase;
     font-size: 12px;
     font-weight: bold;
-    color: #818589;
-    color: #fff;
-    background-color: #656565;
-}
-.calendar .days .day_name-Fri {
-    width: calc(100% / 7);
-    border-right: 1px solid #656565;
-    padding: 20px;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: bold;
-    color: #818589;
+    color: #818984;
     color: #fff;
     background-color: #656565;
 }
@@ -103,9 +95,10 @@
     display: flex;
     flex-flow: column;
     width: calc(100% / 7);
-    border-right: 1px solid #e6e9ea;
-    border-bottom: 1px solid #e6e9ea;
+    border-right: 1.5px dashed #00000046;
+    border-bottom: 1.5px dashed #00000046;
     padding: 15px;
+    font-size: large;
     font-weight: bold;
     color: #7c878d;
     cursor: pointer;
@@ -114,7 +107,7 @@
 .calendar .days .day_num span {
     display: inline-flex;
     width: 30px;
-    font-size: 14px;
+    font-size: 20px;
 }
 .calendar .days .day_num .event {
     margin-top: 10px;
@@ -147,9 +140,35 @@
     cursor: inherit;
 }
 .calendar .days .day_num.selected {
-    background-color: #f1f2f3;
-    cursor: inherit;
+    background-color: #D4F5A4;
+    cursor: pointer;
 }
+
+
+
+#month-year-dropdown {
+    position: absolute;
+    background-color: #fff;
+    padding: 5px;
+    z-index: 100;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+    border-style: solid;
+    border-color: black;
+    border-width: 1.5px;
+    border-radius: 8px;
+}
+
+#month-year-dropdown select {
+    margin: 0px 0;
+    padding: 5px;
+    font-size: 14px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1.5px;
+    border-radius: 8px;
+}
+
 
 
 
@@ -170,7 +189,7 @@
 
     .task_container{
         margin: 30px;
-        margin-top: 67px;
+        margin-top: 90px;
     }
     .task_header{
         background-color: #656565;
@@ -275,4 +294,56 @@
 }
 .assignedContent{
     margin: 30px;
+}
+
+
+
+
+
+
+
+/*pop up module*/
+.modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    margin: 10px 0 5px;
+}
+
+.modal-content input, .modal-content textarea, .modal-content button {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.close {
+    display: flex;
+    justify-content: end;
+    cursor: pointer;
+    font-size: 40px;
 }
