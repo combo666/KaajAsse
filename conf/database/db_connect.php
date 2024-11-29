@@ -1,18 +1,20 @@
 <?php
-    // $DB['db_host'] = "sql3.freesqldatabase.com";
-    // $DB['db_user'] = "sql3746436";
-    // $DB['db_pass'] = "nmE9qv5ZjG";
-    // $DB['db_name'] = "sql3746436";
+require_once __DIR__ . '/vendor/autoload.php';// Load Composer autoload
 
-    // foreach($DB as $key=>$value)
-    // {
-    //     define(strtoupper($key), $value);
-    // }
-    
-    $connect = mysqli_connect("sql3.freesqldatabase.com", "sql3746436", "nmE9qv5ZjG", "sql3746436");
+// Load .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-    if(!$connect)
-    {
-        die("db error");
-    }
+// Use environment variables
+$connect = mysqli_connect(
+    $_ENV['DB_HOST'],
+    $_ENV['DB_USER'],
+    $_ENV['DB_PASS'],
+    $_ENV['DB_NAME'],
+    $_ENV['DB_PORT']
+);
+
+if (!$connect) {
+    die("Database connection error");
+}
 ?>
