@@ -7,6 +7,7 @@ $task_date = $_POST['task_date'] ?? null;
 $task_duration = isset($_POST['task_duration']) ? intval($_POST['task_duration']) : null;
 $assigned_user = isset($_POST['assigned_user']) ? intval($_POST['assigned_user']) : null;
 $task_description = $_POST['task_description'] ?? null;
+$task_color = $_POST['task_color'] ?? null; // Get task color
 
 // Validate required fields
 if (!$task_name || !$task_date || !$task_duration || !$assigned_user || !$task_description) {
@@ -15,8 +16,8 @@ if (!$task_name || !$task_date || !$task_duration || !$assigned_user || !$task_d
 }
 
 // Prepare the statement
-$stmt = $connect->prepare("INSERT INTO task_calendar (task_name, task_start_date, task_duration, assigned_user, task_description) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param('ssiss', $task_name, $task_date, $task_duration, $assigned_user, $task_description);
+$stmt = $connect->prepare("INSERT INTO task_calendar (task_name, task_start_date, task_duration, assigned_user, task_description, task_color) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param('ssisss', $task_name, $task_date, $task_duration, $assigned_user, $task_description, $task_color);
 
 // Execute the statement
 if ($stmt->execute()) {
