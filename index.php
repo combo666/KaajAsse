@@ -1,9 +1,11 @@
 <?php
     session_start();
-    if(isset($_SESSION['uname'])){
-        $uname = $_SESSION['uname'];
-        // echo "jidisjd";
-    }
+    $_SESSION['uname'] = "evan@gmail.com";
+    $uname = $_SESSION['uname'];
+    // if(isset($_SESSION['uname'])){
+    //     $uname = $_SESSION['uname'];
+    //     // echo "jidisjd";
+    // }
     
 ?>
 <?php include('conf/database/db_connect.php'); ?>

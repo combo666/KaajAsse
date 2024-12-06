@@ -17,8 +17,11 @@
             <label for="task_description">Description:</label>
             <textarea id="task_description" name="task_description" rows="4" required></textarea>
 
+            <label for="task_color">Task Color:</label>
+            <input type="color" id="task_color" name="task_color" value="#cab64e"> <!-- Default color -->
+
+
             <button type="submit">Save Task</button>
         </form>
-
     </div>
 </div>
