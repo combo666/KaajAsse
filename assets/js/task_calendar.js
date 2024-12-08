@@ -17,6 +17,7 @@ function updateCalendar() {
 
 
 
+
 //POP UP module
 function openPopup(date) {
     document.getElementById('task_date').value = date; // Set the selected date

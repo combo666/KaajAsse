@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $_SESSION['uname'] = "evan@gmail.com";
+    $_SESSION['uname'] = "shayan@gmail.com";
     $uname = $_SESSION['uname'];
     // if(isset($_SESSION['uname'])){
     //     $uname = $_SESSION['uname'];

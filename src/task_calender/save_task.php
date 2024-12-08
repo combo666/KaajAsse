@@ -1,28 +1,39 @@
-<?php include('../../conf/database/db_connect.php'); ?>
-
 <?php
-// Collect inputs with basic sanitization
-$task_name = $_POST['task_name'] ?? null;
-$task_date = $_POST['task_date'] ?? null;
-$task_duration = isset($_POST['task_duration']) ? intval($_POST['task_duration']) : null;
-$assigned_user = isset($_POST['assigned_user']) ? intval($_POST['assigned_user']) : null;
-$task_description = $_POST['task_description'] ?? null;
-$task_color = $_POST['task_color'] ?? null; // Get task color
+include('../../conf/database/db_connect.php');
 
-// Validate required fields
-if (!$task_name || !$task_date || !$task_duration || !$assigned_user || !$task_description) {
-    echo json_encode(['success' => false, 'error' => 'Invalid input data. All fields are required.']);
-    exit;
-}
+// Collect inputs
+$task_option = $_POST['task_option'];
+$task_id = null;
 
-// Prepare the statement
-$stmt = $connect->prepare("INSERT INTO task_calendar (task_name, task_start_date, task_duration, assigned_user, task_description, task_color) VALUES (?, ?, ?, ?, ?, ?)");
-$stmt->bind_param('ssisss', $task_name, $task_date, $task_duration, $assigned_user, $task_description, $task_color);
-
-// Execute the statement
-if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
+if ($task_option === 'existing') {
+    // Use existing task
+    $task_id = intval($_POST['task_name']);
 } else {
-    echo json_encode(['success' => false, 'error' => $stmt->error]);
+    // Create a new task
+    $task_name = $_POST['new_task_name'];
+    $task_date = $_POST['task_date'];
+    $task_duration = intval($_POST['task_duration']);
+    $task_description = $_POST['task_description'];
+    $task_color = $_POST['task_color'];
+
+    // Insert new task into database
+    $stmt = $connect->prepare("INSERT INTO task_calendar (task_name, task_start_date, task_duration, task_description, task_color) 
+                               VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param('ssiss', $task_name, $task_date, $task_duration, $task_description, $task_color);
+    $stmt->execute();
+    $task_id = $connect->insert_id;
 }
+
+// Assign users to the task
+$assigned_users = $_POST['assigned_user']; // Array of user IDs
+if ($task_id && !empty($assigned_users)) {
+    $connect->query("DELETE FROM task_user WHERE task_id = $task_id"); // Clear existing assignments
+    $assign_stmt = $connect->prepare("INSERT INTO task_user (task_id, user_id) VALUES (?, ?)");
+    foreach ($assigned_users as $user_id) {
+        $assign_stmt->bind_param('ii', $task_id, $user_id);
+        $assign_stmt->execute();
+    }
+}
+
+echo json_encode(['success' => true]);
 ?>

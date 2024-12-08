@@ -145,35 +145,6 @@
 }
 
 
-
-#month-year-dropdown {
-    position: absolute;
-    background-color: #fff;
-    padding: 5px;
-    z-index: 100;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    
-    border-style: solid;
-    border-color: black;
-    border-width: 1.5px;
-    border-radius: 8px;
-}
-
-#month-year-dropdown select {
-    margin: 0px 0;
-    padding: 5px;
-    font-size: 14px;
-    border-style: solid;
-    border-color: black;
-    border-width: 1.5px;
-    border-radius: 8px;
-}
-
-
-
-
-
-
 /* todays's_task_container */
 .parent {
     display: grid;
@@ -346,4 +317,23 @@
     justify-content: end;
     cursor: pointer;
     font-size: 40px;
+}
+
+
+/*date month selector*/
+#month-year-dropdown {
+    position: absolute;
+    background-color: #fff;
+    padding: 5px;
+    z-index: 100;
+    display: none;
+    border: 1.5px solid black;
+    border-radius: 8px;
+}
+
+#month-year-dropdown select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid black;
+    border-radius: 8px;
 }
