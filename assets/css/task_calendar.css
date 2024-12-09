@@ -140,7 +140,7 @@
     cursor: inherit;
 }
 .calendar .days .day_num.selected {
-    background-color: #D4F5A4;
+    background-color: #ffd90048;
     cursor: pointer;
 }
 
@@ -197,7 +197,6 @@
     .dot_priority{
         height: 15px;
         width: 15px;
-        background-color: #ff0000;
         border-radius: 50%;
         display: inline-block;
         border-style: solid;
@@ -223,6 +222,7 @@
         margin: 8px;
         color: #495057;
     }
+    
 
 
 
@@ -234,8 +234,9 @@
 .teamMembersParent{
     background-color: #EFE9E8;
     padding: 12px;
+    margin-right: 12px;
     margin-top: 30px;
-    margin-left: 30px;
+    margin-left: 50px;
     border-style: solid;
     border-color: black;
     border-width: 1.5px ;

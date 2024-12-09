@@ -72,7 +72,11 @@ class Calendar
         // Add days for the current month
         for ($i = 1; $i <= $num_days; $i++) {
             $formatted_date = $this->active_year . '-' . str_pad($this->active_month, 2, '0', STR_PAD_LEFT) . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
-            $html .= '<div class="day_num" onclick="openPopup(\'' . $formatted_date . '\')">';
+
+            // Check if the current day is the same as the active day
+            $is_today = ($formatted_date === date('Y-m-d')) ? 'selected' : '';
+
+            $html .= '<div class="day_num ' . $is_today . '" onclick="openPopup(\'' . $formatted_date . '\')">';
             $html .= '<span>' . $i . '</span>';
 
             // Add events for the current day

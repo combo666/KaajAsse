@@ -46,6 +46,7 @@ while ($event = $events_result->fetch_assoc()) {
     <?php if ($_SESSION['role'] === 'a') include 'popupForm.php'; ?>
     <div class="div2"> <?php include('todays_task.php'); ?> </div>
     <div class="div3"> <?php include('team_members.php'); ?> </div>
+    <div style="margin-bottom: 50px ;"></div>
 </div>
 
 <?php include('../../examples/includes/navbar.php'); ?>
