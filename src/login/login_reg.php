@@ -29,6 +29,9 @@ include '../../conf/database/db_connect.php';
             echo "User not found!";
         }
     }
+    else if(isset($_POST["sign-up"])){
+        
+    }
 
 ?>
 
