@@ -77,11 +77,7 @@ composer install
 The .env file contains configuration variables for the project. Follow these steps to set it up:
 
 1. Create a new .env file in the root of the project directory.
-2. Copy the content from the .env.example file if available:
-```bash
-cp .env.example .env
-```
-3. Fill in the required values in the .env file. Example:
+2. Fill in the required values in the .env file. Example:
 ```env
 DB_HOST=mysql-91cbba5-kaajasse.e.aivencloud.com
 DB_PORT=17375
