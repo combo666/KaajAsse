@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../../conf/database/db_connect.php';
+
 function generateUniqueCode($existingCodes, $length = 6)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -16,69 +17,61 @@ function generateUniqueCode($existingCodes, $length = 6)
     return $code;
 }
 
-$user_id = mysqli_real_escape_string($connect, $_SESSION['user_id']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = [];
 
-$query = "SELECT p.name, p.owner
-FROM KaajAsse.projects p
-INNER JOIN KaajAsse.project_user pu ON p.id = pu.project_id
-WHERE pu.user_id = $user_id";
+    if (isset($_SESSION['user_id'], $_SESSION['uname'], $_POST['pname'])) {
+        $name = mysqli_real_escape_string($connect, $_POST['pname']);
+        $uname = mysqli_real_escape_string($connect, $_SESSION['uname']);
+        $uid = $_SESSION['user_id'];
 
-$result = mysqli_query($connect, $query);
-
-
-?>
-
-
-<?php
-if (isset($_POST["create"])) {
-    // Get user information and sanitize input
-    $name = mysqli_real_escape_string($connect, $_POST["pname"]);
-    $uname = mysqli_real_escape_string($connect, $_SESSION['uname']);
-    $uid = $_SESSION['user_id'];
-
-    // Fetch existing invitation codes
-    $query4 = "SELECT projects.invitation_code AS code FROM projects";
-    $result4 = mysqli_query($connect, $query4);
-    $existingCodes = [];
-    while ($row = mysqli_fetch_assoc($result4)) {
-        $existingCodes[] = $row['code'];
-    }
-
-    // Generate a unique invitation code
-    $newInvitationCode = generateUniqueCode($existingCodes);
-
-    // Insert the new project
-    $query1 = "INSERT INTO KaajAsse.projects(name, user_id, owner, invitation_code) 
-               VALUES('$name', '$uid', '$uname', '$newInvitationCode')";
-
-    $result1 = mysqli_query($connect, $query1);
-
-    if ($result1) {
-        // Insert project-user relationship
-        $newProjectId = mysqli_insert_id($connect);
-        $query2 = "INSERT INTO KaajAsse.project_user(project_id, user_id) VALUES('$newProjectId', '$uid')";
-        $result2 = mysqli_query($connect, $query2);
-
-        if ($result2) {
-            echo json_encode([
-                "status" => "success",
-                "project" => [
-                    "name" => $name,
-                    "owner" => $uname,
-                ]
-            ]);
-            exit;
+        $query4 = "SELECT invitation_code AS code FROM KaajAsse.projects";
+        $result4 = mysqli_query($connect, $query4);
+        $existingCodes = [];
+        while ($row = mysqli_fetch_assoc($result4)) {
+            $existingCodes[] = $row['code'];
         }
+
+        $newInvitationCode = generateUniqueCode($existingCodes);
+
+        $query1 = "INSERT INTO KaajAsse.projects(name, user_id, owner, invitation_code) 
+                   VALUES('$name', '$uid', '$uname', '$newInvitationCode')";
+        if (mysqli_query($connect, $query1)) {
+            $newProjectId = mysqli_insert_id($connect);
+
+            $query2 = "INSERT INTO KaajAsse.project_user(project_id, user_id) VALUES('$newProjectId', '$uid')";
+            if (mysqli_query($connect, $query2)) {
+                $response = [
+                    "status" => "success",
+                    "project" => [
+                        "name" => $name,
+                        "owner" => $uname,
+                    ]
+                ];
+            } else {
+                $response = ["status" => "error", "message" => "Error linking user to the project."];
+            }
+        } else {
+            $response = ["status" => "error", "message" => "Error creating project: " . mysqli_error($connect)];
+        }
+    } else {
+        $response = ["status" => "error", "message" => "Required fields are missing."];
     }
-    // Return error if anything fails
-    echo json_encode(["status" => "error", "message" => "Error creating project: " . mysqli_error($connect)]);
+
+    echo json_encode($response);
     exit;
 }
+
+$user_id = mysqli_real_escape_string($connect, $_SESSION['user_id']);
+$query = "SELECT p.name, p.owner
+          FROM KaajAsse.projects p
+          INNER JOIN KaajAsse.project_user pu ON p.id = pu.project_id
+          WHERE pu.user_id = $user_id";
+$result = mysqli_query($connect, $query);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,7 +85,6 @@ if (isset($_POST["create"])) {
         integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
 <body>
     <div id="main-section">
         <h1 style="text-align:center; padding-top: 50px;">Welcome, <?php echo $_SESSION['uname'] . "!"; ?></h1>
@@ -105,13 +97,10 @@ if (isset($_POST["create"])) {
         <div class="project-lists">
             <h2>My Projects</h2>
             <br><br>
-            <button id="createProjectBtn" style="margin: 10px 0; float:right; padding: 10px; cursor: pointer">Create a
-                new project</button>
+            <button id="createProjectBtn" style="margin: 10px 0; float:right; padding: 10px; cursor: pointer">Create a new project</button>
 
             <div id="projectContainer">
-
                 <?php
-
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         ?>
@@ -134,71 +123,64 @@ if (isset($_POST["create"])) {
             <h2>Create a New Project</h2>
             <form id="createProjectForm">
                 <input type="text" id="projectName" placeholder="Project Name" name="pname" required>
-                <button type="submit" style="cursor: pointer; margin-top: 10px;" name="create">Create</button>
+                <button type="submit" style="cursor: pointer; margin-top: 10px;">Create</button>
             </form>
         </div>
     </div>
 
     <script>
-    const modal = document.getElementById('createProjectModal');
-    const btn = document.getElementById('createProjectBtn');
-    const span = document.getElementsByClassName('close')[0];
-    const projectContainer = document.getElementById('projectContainer');
+        const modal = document.getElementById('createProjectModal');
+        const btn = document.getElementById('createProjectBtn');
+        const span = document.getElementsByClassName('close')[0];
+        const projectContainer = document.getElementById('projectContainer');
 
-    // Show the modal when the "Create a new project" button is clicked
-    btn.onclick = function () {
-        modal.style.display = 'block';
-    };
+        btn.onclick = function () {
+            modal.style.display = 'block';
+        };
 
-    // Close the modal when the close button is clicked
-    span.onclick = function () {
-        modal.style.display = 'none';
-    };
-
-    // Close the modal if clicked outside of it
-    window.onclick = function (event) {
-        if (event.target == modal) {
+        span.onclick = function () {
             modal.style.display = 'none';
-        }
-    };
+        };
 
-    // Handle form submission
-    document.getElementById('createProjectForm').onsubmit = async function (e) {
-        e.preventDefault(); // Prevent page refresh
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
 
-        // Create FormData from the form
-        const formData = new FormData(this);
+        document.getElementById('createProjectForm').onsubmit = async function (e) {
+            e.preventDefault(); // Prevent page refresh
 
-        // Send the form data using fetch
-        const response = await fetch('', {
-            method: 'POST',
-            body: formData
-        });
+            const formData = new FormData(this);
 
-        // Parse the JSON response
-        const result = await response.json();
+            try {
+                const response = await fetch('', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
 
-        if (result.status === 'success') {
-            // Create a new project item and add it to the project container
-            const newProject = document.createElement('div');
-            newProject.classList.add('project-item');
-            newProject.innerHTML = `
-                <div class="project-title">${result.project.name}</div>
-                <div class="project-owner">${result.project.owner}</div>
-                <button class="btn-project" style="cursor: pointer;">Go</button>
-            `;
-            projectContainer.appendChild(newProject);
+                if (result.status === 'success') {
+                    const newProject = document.createElement('div');
+                    newProject.classList.add('project-item');
+                    newProject.innerHTML = `
+                        <div class="project-title">${result.project.name}</div>
+                        <div class="project-owner">${result.project.owner}</div>
+                        <button class="btn-project" style="cursor: pointer;">Go</button>
+                    `;
+                    projectContainer.appendChild(newProject);
 
-            // Close the modal and reset the form
-            modal.style.display = 'none';
-            document.getElementById('projectName').value = '';
-        } else {
-            // Show an alert if there is an error
-            alert(result.message);
-        }
-    };
-</script>
-
+                    modal.style.display = 'none';
+                    document.getElementById('projectName').value = '';
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('There was an issue creating the project.');
+            }
+        };
+    </script>
 </body>
-
 </html>
