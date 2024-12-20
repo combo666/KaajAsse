@@ -13,6 +13,7 @@ if (isset($_POST['sign-in'])) {
             session_start();
             $_SESSION['user_id'] = $user['user_id']; 
             $_SESSION['user_email'] = $user['user_email'];
+            $_SESSION['uname'] = $user['first_name'] . " " . $user['last_name'];
 
             header("Location: ../projects/index.php");
             exit();

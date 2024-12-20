@@ -4,7 +4,7 @@
     // $uname = $_SESSION['uname'];
     if(isset($_SESSION['uname'])){
         $uname = $_SESSION['uname'];
-        echo "jidisjd";
+        // echo $uname;
     }
 ?>
 <?php include('conf/database/db_connect.php'); ?>
@@ -13,12 +13,13 @@
 <?php
     if(isset($_SESSION['uname']))
     {
-        include './examples/includes/header.php';
+        // include './examples/includes/header.php';
      
-        include './examples/includes/navbar.php';
-        session_unset();
-        session_destroy();
-
+        // include './examples/includes/navbar.php';
+        // session_unset();
+        // session_destroy();
+        header("Location: src/projects/index.php");
+        exit();
     }
     else
     {
