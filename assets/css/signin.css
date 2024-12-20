@@ -4,65 +4,12 @@
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
-    font-family: 'Arial', sans-serif;
-    background: #FAF5E7;
-    display: flex;
+.form-section{
+    display: grid;
+    height: 80vh;
+    width: 100vw;
     justify-content: center;
-    align-items: center;
-}
-
-.background {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
-.left-section {
-    width: 50%; 
-    background: linear-gradient(to bottom, #3fada8, #67eaca); 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    color: white;
-    text-align: center;
-    padding: 20px;
-    overflow-y: auto; 
-    overflow-x: hidden; 
-    word-wrap: break-word; 
-    box-sizing: border-box; 
-    min-height: 100%; 
-}
-
-.left-section h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    width: 100%;
-}
-
-.left-section p {
-    font-size: 16px;
-    line-height: 1.6;
-    word-wrap: break-word; 
-    overflow: hidden; 
-}
-
-.left-section img {
-    width: 150px;
-    margin-top: 20px;
-}
-
-.right-section {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #1e1e2f;
+    align-content: center;
 }
 
 .signin-box {
@@ -88,12 +35,14 @@ body, html {
     position: absolute;
     width: 50%;
     height: 40px;
-    background: linear-gradient(to bottom, #28d7cec5, #41d4afd3);
+    background: #D3CFC3;
+    border: 1.5px solid #000;
     border-radius: 30px;
     transition: left 0.5s ease;
     top: 0;
     left: 0; 
     z-index: 1;
+    color: #5E5E5E;
 }
 
 
@@ -162,7 +111,7 @@ body, html {
 .signin-btn {
     width: 100%;
     padding: 10px;
-    background: linear-gradient(to bottom, #23b9b1bc, #42ccaad3);
+    background: #5E5E5E;
     border-radius: 30px;
     border: none;
     border-radius: 3px;
@@ -174,7 +123,8 @@ body, html {
 }
 
 .signin-btn:hover {
-    background: #0cb9b9;
+    background: #D3CFC3;
+    color: #000;
 }
 
 .bandage {

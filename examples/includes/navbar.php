@@ -1,6 +1,8 @@
 <div class="navbar">
     <div class="nav-item">
-        <i class="fa-solid fa-border-all"></i>
+        <a href="../../index.php">
+            <i class="fa-solid fa-border-all"></i>
+        </a>
     </div>
     <div class="nav-item">
         <i class="fa-solid fa-people-group"></i>
