@@ -15,7 +15,7 @@ if (isset($_POST['sign-in'])) {
             $_SESSION['user_email'] = $user['user_email'];
             $_SESSION['uname'] = $user['first_name'] . " " . $user['last_name'];
 
-            header("Location: ../projects/index.php");
+            header("Location: ../dashboard/dashboard.php");
             exit();
 
         } else {

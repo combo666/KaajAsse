@@ -16,9 +16,9 @@
         // include './examples/includes/header.php';
      
         // include './examples/includes/navbar.php';
-        session_unset();
-        session_destroy();
-        header("Location: src/projects/index.php");
+        // session_unset();
+        // session_destroy();
+        header("Location: src/dashboard/dashboard.php");
         exit();
     }
     else
