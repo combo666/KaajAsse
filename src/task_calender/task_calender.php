@@ -4,12 +4,12 @@ include('../../conf/database/db_connect.php');
 session_start();
 
 // Check if user is logged in
-if (!isset($_SESSION['uname'])) {
+if (!isset($_SESSION['user_email'])) {
     die("Access denied. Please log in.");
 }
 
 // Fetch user data from the database
-$email = $_SESSION['uname'];
+$email = $_SESSION['user_email'];
 $query = "SELECT * FROM KaajAsse.user WHERE user_email = ?";
 $stmt = $connect->prepare($query);
 $stmt->bind_param("s", $email);

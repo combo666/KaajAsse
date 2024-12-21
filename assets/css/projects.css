@@ -43,7 +43,6 @@
 }
 .project-lists .project-item{
     background-color: rgba(20, 20, 20, 0.795);
-    color: white;
     display: flex;
     justify-content: space-between;
     justify-items: flex-start;
@@ -51,6 +50,12 @@
     padding: 20px;
     height: 3vh;
     border-radius: 5px;
+}
+
+.project-lists .project-item input{
+    background-color: transparent;
+    border: none;
+    color: white;
 }
 .project-lists .project-item button{
     background-color: antiquewhite;

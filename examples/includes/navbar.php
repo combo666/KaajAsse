@@ -1,6 +1,6 @@
 <div class="navbar">
     <div class="nav-item">
-        <a href="../../index.php">
+        <a href="../../src/dashboard/dashboard.php">
             <i class="fa-solid fa-border-all"></i>
         </a>
     </div>
