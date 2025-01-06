@@ -24,7 +24,9 @@
         <i class="fa-solid fa-ranking-star"></i>
     </div>
     <div class="nav-item">
-        <i class="fa-regular fa-user"></i>
+        <a href="../../src/profile/profile.php">
+            <i class="fa-regular fa-user"></i>
+        </a>
     </div>
     </body>
 
