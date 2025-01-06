@@ -5,7 +5,9 @@
         </a>
     </div>
     <div class="nav-item">
-        <i class="fa-solid fa-people-group"></i>
+        <a href="../../src/team_members/team_members.php">
+            <i class="fa-solid fa-people-group"></i>
+        </a>
     </div>
     <div class="nav-item">
         <a href="../../src/board/kanban_board.php">
