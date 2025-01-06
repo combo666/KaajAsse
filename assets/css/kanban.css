@@ -1,0 +1,123 @@
+
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 0 30px;
+}
+
+.control-btn:hover {
+    background-color: #ddd;
+}
+
+.trash-btn {
+    color: red;
+    font-weight: bold;
+}
+
+.kanban-board {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+/* Column Styles */
+.kanban-column {
+    background-color: #d8d8d8;
+    width: 20%;
+    min-height: 400px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.column-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 5px 0;
+    border-radius: 5px;
+}
+
+.backlog {
+    background-color: #b3c7f3;
+}
+
+.todo {
+    background-color: #b4f3b3;
+}
+
+.in-progress {
+    background-color: #b3e7f3;
+}
+
+.done {
+    background-color: #f3b3b3;
+}
+
+/* Task Card Styles */
+.task {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.priority {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.task-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.project {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.date {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.subtask-btn {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.subtask-btn:hover {
+    background-color: #ddd;
+}
+
+/* Priority Colors */
+.medium-priority {
+    border-left: 5px solid #f3b3c6;
+}
+
+.low-priority {
+    border-left: 5px solid #b3f3cf;
+}
