@@ -19,11 +19,11 @@
             <i class="fa-regular fa-calendar-check"></i>
         </a>
     </div>
-    <div class="nav-item">
+    <!-- <div class="nav-item">
         <a href="../../src/gantt_chart/gantt_chart.php">
             <i class="fa-solid fa-chart-line"></i>
         </a>
-    </div>
+    </div> -->
     <div class="nav-item">
         <a href="../../src/profile/profile.php">
             <i class="fa-regular fa-user"></i>

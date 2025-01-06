@@ -6,94 +6,84 @@ session_start();
 // echo $_SESSION['user_id']
 ?>
 
-<div class="header">
-    <img src="assets/img/list.png" alt="" class="img-list">
-    <h1>Team Members</h1>
-</div>
-<hr>
-<button class="button">Add User</button>
+<h1>Team Members</h1>
+<button class="add-user">+ Add User</button>
+<table>
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Title</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Simulating fetching data from the database
+        $team_members = [
+            ["name" => "Codewave Asante", "title" => "Administrator", "email" => "admin@gmail.com", "role" => "Admin"],
+            ["name" => "John Doe", "title" => "Software Engineer", "email" => "john.doe@example.com", "role" => "Developer"],
+            ["name" => "Jane Smith", "title" => "Product Manager", "email" => "jane.smith@example.com", "role" => "Manager"]
+        ];
 
-<div>
-    <!-- table start -->
-    <form action="">
-        <table>
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Title</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Active</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="avatar">CA</span> Codewave Asante</td>
-                    <td>Administrator</td>
-                    <td>admin@gmail.com</td>
-                    <td>Admin, Manager</td>
-                    <td><span class="status active">Active</span></td>
-                    <td class="actions">
-                        <button type="button" class="edit" onclick="toggleEditRow(this)">Edit</button>
-                        <button type="button" class="delete">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="avatar">JD</span> John Doe</td>
-                    <td>Software Engineer</td>
-                    <td>john.doe@example.com</td>
-                    <td>Developer</td>
-                    <td><span class="status disabled">Disabled</span></td>
-                    <td class="actions">
-                        <button type="button" class="edit" onclick="toggleEditRow(this)">Edit</button>
-                        <button type="button" class="delete">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
+        foreach ($team_members as $index => $member) {
+            echo "<tr data-index='$index'>";
+            echo "<td>{$member['name']}</td>";
+            echo "<td>{$member['title']}</td>";
+            echo "<td>{$member['email']}</td>";
+            echo "<td>{$member['role']}</td>";
+            echo "<td><button class='edit-btn'>Edit</button> <button class='delete-btn'>Delete</button></td>";
+            echo "</tr>";
+        }
+        ?>
+    </tbody>
+</table>
 </div>
-
-<?php include('../../examples/includes/navbar.php'); ?>
 
 <script>
-    function toggleEditRow(button) {
-      const row = button.closest('tr');
-      const titleCell = row.cells[1];
-      const emailCell = row.cells[2];
-      const roleCell = row.cells[3];
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const row = event.target.closest('tr');
+            const cells = row.querySelectorAll('td');
 
-      if (button.textContent === "Edit") {
+            const name = cells[0].innerText;
+            const title = cells[1].innerText;
+            const email = cells[2].innerText;
+            const role = cells[3].innerText;
 
-        const titleValue = titleCell.textContent.trim();
-        const emailValue = emailCell.textContent.trim();
-        const roleValue = roleCell.textContent.trim().split(', ');
+            const nameInput = `<input type='text' value='${name}'>`;
+            const titleInput = `<input type='text' value='${title}'>`;
+            const emailInput = `<input type='text' value='${email}'>`;
+            const roleInput = `<input type='text' value='${role}'>`;
 
-        titleCell.innerHTML = `<input type="text" value="${titleValue}" />`;
-        emailCell.innerHTML = `<input type="email" value="${emailValue}" />`;
-        roleCell.innerHTML = `
-          <select multiple>
-            <option value="Admin" ${roleValue.includes("Admin") ? "selected" : ""}>Admin</option>
-            <option value="Developer" ${roleValue.includes("Developer") ? "selected" : ""}>Developer</option>
-            <option value="Manager" ${roleValue.includes("Manager") ? "selected" : ""}>Manager</option>
-            <option value="Designer" ${roleValue.includes("Designer") ? "selected" : ""}>Designer</option>
-          </select>
-        `;
+            cells[0].innerHTML = nameInput;
+            cells[1].innerHTML = titleInput;
+            cells[2].innerHTML = emailInput;
+            cells[3].innerHTML = roleInput;
 
-        button.textContent = "Save";
-      } else {
-        
-        const updatedTitle = titleCell.querySelector('input').value;
-        const updatedEmail = emailCell.querySelector('input').value;
-        const updatedRoles = Array.from(roleCell.querySelector('select').selectedOptions).map(option => option.value);
+            event.target.innerText = 'Save';
+            event.target.classList.add('save-btn');
 
-        titleCell.textContent = updatedTitle;
-        emailCell.textContent = updatedEmail;
-        roleCell.textContent = updatedRoles.join(', ');
+            event.target.removeEventListener('click', arguments.callee);
+            event.target.addEventListener('click', () => {
+                const updatedName = cells[0].querySelector('input').value;
+                const updatedTitle = cells[1].querySelector('input').value;
+                const updatedEmail = cells[2].querySelector('input').value;
+                const updatedRole = cells[3].querySelector('input').value;
 
-        button.textContent = "Edit";
-      }
-    }
-  </script>
+                cells[0].innerText = updatedName;
+                cells[1].innerText = updatedTitle;
+                cells[2].innerText = updatedEmail;
+                cells[3].innerText = updatedRole;
+
+                event.target.innerText = 'Edit';
+                event.target.classList.remove('save-btn');
+            });
+        });
+    });
+</script>
+<?php include('../../examples/includes/navbar.php'); ?>
+
 <?php include('../../examples/includes/footer.php'); ?>

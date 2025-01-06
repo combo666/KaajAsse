@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../conf/database/db_connect.php');
+include('../../examples/includes/header.php');
 
 // Handle AJAX request to update the task status
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -9,65 +10,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newStatus = $data['status'] ?? null;
 
     if ($taskId && $newStatus) {
-        // Simulate database update (replace this with real DB logic)
-        echo "Task ID $taskId status changed to '$newStatus'.";
-    } else {
-        echo "Error: Invalid task ID or status.";
+        $updateQuery = "UPDATE KaajAsse.task_calendar SET task_status = '$newStatus' WHERE task_id = '$taskId'";
+        mysqli_query($connect, $updateQuery);
+        // echo "Task ID $taskId status changed to '$newStatus'.";
     }
-    exit;  // Stop script execution
+    exit;
 }
 
 // Render page for GET request (Normal page load)
-include('../../examples/includes/header.php');
+if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
+    $user_id = mysqli_real_escape_string($connect, $_SESSION['user_id']);
+    $query = "SELECT * FROM KaajAsse.task_calendar WHERE assigned_user = $user_id";
+    $result = mysqli_query($connect, $query);
+
+    $tasks = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $tasks[$row['task_status']][] = $row;
+    }
+}
 ?>
 
 <div class="controls">
     <button class="control-btn">✏️ Create Task</button>
-    <button class="control-btn">📂 Filter</button>
-    <button class="control-btn">List View</button>
     <button class="control-btn trash-btn">🗑️ Trashed Tasks</button>
 </div>
 
 <div class="kanban-board">
-    <div class="kanban-column" data-status="backlog">
-        <h2 class="column-title">Backlog</h2>
-        <div class="task" draggable="true" data-id="1">
-            <p class="priority">Medium Priority</p>
-            <p class="task-title">Fix UI bugs</p>
-        </div>
-    </div>
+    <?php
+    $statuses = ['backlog', 'todo', 'inprogress', 'done'];
+    foreach ($statuses as $status) {
+        echo "<div class='kanban-column' data-status='$status'>";
+        echo "<h2 class='column-title $status'>" . ucfirst($status) . "</h2>";
 
-    <div class="kanban-column" data-status="todo">
-        <h2 class="column-title">To Do</h2>
-        <div class="task" draggable="true" data-id="2">
-            <p class="priority">High Priority</p>
-            <p class="task-title">Implement API</p>
-        </div>
-    </div>
+        if (!empty($tasks[$status])) {
+            foreach ($tasks[$status] as $task) {
+                echo "<div class='task' draggable='true' data-id='{$task['task_id']}'>";
+                echo "<p class='priority'>{$task['task_priority']} Priority</p>";
+                echo "<p class='task-title'>{$task['task_name']}</p>";
+                echo "<p class='date'>{$task['task_start_date']}</p>";
+                echo "</div>";
+            }
+        }
 
-    <div class="kanban-column" data-status="inprogress">
-        <h2 class="column-title">In Progress</h2>
-        <div class="task" draggable="true" data-id="3">
-            <p class="priority">Low Priority</p>
-            <p class="task-title">Write documentation</p>
-        </div>
-    </div>
-
-    <div class="kanban-column" data-status="done">
-        <h2 class="column-title">Done</h2>
-        <div class="task" draggable="true" data-id="4">
-            <p class="priority">Completed</p>
-            <p class="task-title">Deploy application</p>
-        </div>
-    </div>
+        echo "</div>";
+    }
+    ?>
 </div>
 
-<p id="status-message"></p>
+<!-- <p id="status-message"></p> -->
 
 <script>
 const tasks = document.querySelectorAll('.task');
 const columns = document.querySelectorAll('.kanban-column');
-const statusMessage = document.getElementById('status-message');
+// const statusMessage = document.getElementById('status-message');
 
 // Allow dragging
 tasks.forEach(task => {
@@ -108,12 +103,12 @@ columns.forEach(column => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: taskId, status: newStatus })
             })
-            .then(response => response.text())
-            .then(message => {
-                statusMessage.textContent = message;
-            })
+            // .then(response => response.text())
+            // .then(message => {
+            //     statusMessage.textContent = message;
+            // })
             .catch(error => {
-                statusMessage.textContent = 'Error updating status.';
+                // statusMessage.textContent = 'Error updating status.';
                 console.error(error);
             });
         }
