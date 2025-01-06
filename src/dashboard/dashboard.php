@@ -42,7 +42,7 @@ if(isset($_POST['logout'])){
 session_unset();
 session_destroy();
 
-echo "hey";
+// echo "hey";
 
 
 if(isset($_SESSION['uname'])){
