@@ -20,7 +20,9 @@
         </a>
     </div>
     <div class="nav-item">
-        <i class="fa-solid fa-chart-line"></i>
+        <a href="../../src/gantt_chart/gantt_chart.php">
+            <i class="fa-solid fa-chart-line"></i>
+        </a>
     </div>
     <div class="nav-item">
         <i class="fa-solid fa-ranking-star"></i>
