@@ -30,10 +30,10 @@ if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
 }
 ?>
 
-<div class="controls">
+<!-- <div class="controls">
     <button class="control-btn">✏️ Create Task</button>
     <button class="control-btn trash-btn">🗑️ Trashed Tasks</button>
-</div>
+</div> -->
 
 <div class="kanban-board">
     <?php
