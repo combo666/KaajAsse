@@ -274,63 +274,159 @@
 
 
 
-/*pop up module*/
+/* Popup Modal */
 .modal {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    background: #ffffff; /* Clean white background */
+    padding: 25px;
+    
+    transform: translate(0%, -10%);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* More subtle shadow */
     width: 90%;
-    max-width: 500px;
+    max-width: 450px; /* Slightly narrower for a sleek look */
+    animation: fadeIn 0.3s ease; /* Smooth fade-in animation */
+    
 }
 
 .modal-content form {
     display: flex;
     flex-direction: column;
+    gap: 15px; /* Consistent spacing between elements */
 }
 
+/* Labels */
 .modal-content label {
-    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333; /* Darker text for better readability */
+    margin-bottom: 5px;
 }
 
-.modal-content input, .modal-content textarea, .modal-content button {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Inputs, Textarea, and Button Styling */
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
 }
 
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+    outline: none;
+    border-color: #007BFF; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2); /* Subtle glow */
+}
 
-.close {
-    display: flex;
-    justify-content: end;
+/* Button Styling */
+.modal-content button {
+    background-color: #007BFF; /* Primary button color */
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 40px;
+    transition: background-color 0.3s ease;
 }
+
+.modal-content button:hover {
+    background-color: #0056b3; /* Darker on hover */
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 15px; /* Position close to the top */
+    right: 15px; /* Position close to the right */
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10; /* Ensures it stays above other content */
+}
+
+.close:hover {
+    color: #ff4d4d; /* Slight red tint on hover */
+}
+
+/* Modal Content Positioning */
+.modal-content {
+    position: relative; /* Ensures the close button is positioned relative to the modal */
+    padding-top: 50px; /* Adds space for the close button */
+}
+
+/* Additional Styling */
+textarea {
+    resize: none; /* Disable resizing */
+}
+
+select[multiple] {
+    height: auto; /* Adjust height for multiple selects */
+    overflow-y: auto;
+}
+
+.modal-content input[type="color"] {
+    padding: 5px; /* Adjust for smaller color picker */
+    border: none; /* Remove border for cleaner look */
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 
 /*date month selector*/
 #month-year-dropdown {
-    position: absolute;
-    background-color: #fff;
-    padding: 5px;
-    z-index: 100;
-    display: none;
-    border: 1.5px solid black;
-    border-radius: 8px;
+    margin-left: 5px; /* Space between the icon and the dropdown */
+    margin-top: 5px;
+    padding: 8px;
+    font-size: 14px;
+    border: 0px solid #818589;
+    border-radius: 5px;
+    background-color: #ffffff00;
+    color: #333;
+    outline: none;
+    cursor: pointer;
 }
+
+#month-year-dropdown:hover {
+    border-color: #656565;
+}
+
+#month-year-dropdown:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
 
 #month-year-dropdown select {
     padding: 5px;
@@ -338,3 +434,4 @@
     border: 1px solid black;
     border-radius: 8px;
 }
+ 
