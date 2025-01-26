@@ -148,25 +148,22 @@
             const formData = new FormData(form);
 
             // Send the data using Fetch API
-            fetch('./save_task.php', {
+            fetch('save_task.php', {
                     method: 'POST',
-                    body: formData
+                    body: new FormData(taskForm),
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        location.reload(); // Reload to reflect changes
+                        alert('Task saved successfully.');
                     } else {
-                        alert(data.message || 'Failed to save the task.');
+                        console.error('Task saving failed.');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while saving the task.');
-                })
-                .finally(() => {
-                    submitButton.disabled = false; // Re-enable the button after the request is finished
+                    console.error('Unexpected error:', error);
                 });
+
         });
     });
 </script>

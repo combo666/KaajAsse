@@ -30,14 +30,68 @@ include 'Calendar.php';
 $calendar = new Calendar();
 
 // Fetch events from the database
-$events_query = "SELECT task_name, task_start_date, task_duration, task_color FROM KaajAsse.task_calendar";
+$events_query = "
+    SELECT 
+        task_id,
+        task_name,
+        task_start_date,
+        task_duration,
+        task_color
+    FROM KaajAsse.task_calendar
+";
 $events_result = $connect->query($events_query);
 
-while ($event = $events_result->fetch_assoc()) {
-    // Debug: Ensure $event['task_color'] is correctly fetched
-    error_log("Task: " . $event['task_name'] . ", Color: " . $event['task_color']); // Logs color for debugging
-    $calendar->add_event($event['task_name'], $event['task_start_date'], $event['task_duration'], $event['task_color']);
+if (!$events_result) {
+    die('Query failed: ' . $connect->error);
 }
+
+
+while ($event = $events_result->fetch_assoc()) {
+    // Check if the user has permission to see this task (for 'u' role)
+    if ($_SESSION['role'] === 'u') {
+        // Fetch all task IDs assigned to the logged-in user
+        $task_query = "
+            SELECT task_id 
+            FROM KaajAsse.task_user 
+            WHERE user_id = ?
+        ";
+        $task_stmt = $connect->prepare($task_query);
+        if (!$task_stmt) {
+            error_log("Error preparing query: " . $connect->error);
+            continue;
+        }
+    
+        // Bind only the logged-in user's ID
+        $task_stmt->bind_param("i", $_SESSION['user_id']);
+        $task_stmt->execute();
+    
+        $task_result = $task_stmt->get_result();
+    
+        // Fetch task IDs into an array
+        $assigned_task_ids = [];
+        while ($row = $task_result->fetch_assoc()) {
+            $assigned_task_ids[] = $row['task_id'];
+        }
+    
+        // Check if the current event's task_id is in the array of assigned tasks
+        if (!in_array($event['task_id'], $assigned_task_ids)) {
+            error_log("Task ID " . $event['task_id'] . " is not assigned to User ID " . $_SESSION['user_id']);
+            continue; // Skip tasks not assigned to this user
+        } else {
+            error_log("Task ID " . $event['task_id'] . " is assigned to User ID " . $_SESSION['user_id']);
+        }
+    }
+    
+    // Add the event to the calendar
+    $calendar->add_event(
+        $event['task_name'],
+        $event['task_start_date'],
+        $event['task_duration'],
+        $event['task_color']
+    );
+    
+}
+
 
 ?>
 

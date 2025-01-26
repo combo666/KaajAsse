@@ -45,6 +45,7 @@
 
         // Bind the email parameter
         $stmt->bind_param('s', $current_user_email);
+        
 
         // Execute the query
         if (!$stmt->execute()) {
@@ -66,7 +67,9 @@
         if ($result->num_rows > 0) {
             while ($task = $result->fetch_assoc()) {
                 $priority = $task['priority'];
-                $priority_color = $priority_colors[$priority] ?? '#ffffff'; // Default white for undefined priorities
+                $priority_color = $priority_colors[$priority] ?? '#ffffff'; // Default white for undefined 
+                
+                
 
                 // Display each task in a card
                 echo '

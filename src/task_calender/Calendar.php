@@ -1,4 +1,5 @@
 <?php
+
 class Calendar
 {
     private $active_year, $active_month, $active_day;
@@ -19,19 +20,15 @@ class Calendar
 
     public function add_event($txt, $date, $days = 1, $color = '', $assigned_user = null)
     {
-        // Only superusers and admins can add events
-        if (isset($_SESSION['role']) && ($_SESSION['role'] === 's' || $_SESSION['role'] === 'a')) {
-            $color = $color ? ' ' . $color : $color;
-            $this->events[] = [
-                'text' => $txt,
-                'date' => $date,
-                'days' => $days,
-                'color' => $color,
-                'assigned_user' => $assigned_user, // Assign to a specific user if provided
-            ];
-        }
+        $color = $color ? ' ' . $color : $color;
+        $this->events[] = [
+            'text' => $txt,
+            'date' => $date,
+            'days' => $days,
+            'color' => $color,
+            'assigned_user' => $assigned_user, 
+        ];
     }
-    
 
     public function __toString()
     {
@@ -44,35 +41,30 @@ class Calendar
         $html .= '<div class="month-year" id="month-year" onmouseover="showDropdown()" onmouseleave="hideDropdown()">';
         $html .= date('F Y', strtotime($this->active_year . '-' . $this->active_month));
 
-
         $html .= '<div style="display: inline-flex; align-items: center;">';
-        $html .= ' <a href="" title="calendar icons" target="_blank" style="font-weight: bold; color: #818589; text-decoration: none;">';
+        $html .= '<a href="" title="calendar icons" target="_blank" style="font-weight: bold; color: #818589; text-decoration: none;">';
         $html .= '<img src="../../assets/img/schedule.svg" alt="Calendar Icon" style="width:36px; height:36px; vertical-align:middle; margin-left: 5px;">';
         $html .= '</a>';
 
         $html .= '<div id="month-year-dropdown" style="display:none;">';
 
+        // Month dropdown
+        $html .= '<select id="month-select" onchange="updateCalendar()">';
+        for ($m = 1; $m <= 12; $m++) {
+            $selected = ($m == $this->active_month) ? 'selected' : '';
+            $html .= '<option value="' . $m . '" ' . $selected . '>' . date('F', mktime(0, 0, 0, $m, 10)) . '</option>';
+        }
+        $html .= '</select>';
 
-                // Month dropdown
-                $html .= '<select id="month-select" onchange="updateCalendar()">';
-                for ($m = 1; $m <= 12; $m++) {
-                    $selected = ($m == $this->active_month) ? 'selected' : '';
-                    $html .= '<option value="' . $m . '" ' . $selected . '>' . date('F', mktime(0, 0, 0, $m, 10)) . '</option>';
-                }
-                $html .= '</select>';
-        
-                // Year dropdown
-                $html .= '<select id="year-select" onchange="updateCalendar()">';
-                for ($y = date('Y') - 5; $y <= date('Y') + 5; $y++) {
-                    $selected = ($y == $this->active_year) ? 'selected' : '';
-                    $html .= '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
-                }
-                $html .= '</select>';
-                $html .= '</div>'; // Close month-year-dropdown
+        // Year dropdown
+        $html .= '<select id="year-select" onchange="updateCalendar()">';
+        for ($y = date('Y') - 5; $y <= date('Y') + 5; $y++) {
+            $selected = ($y == $this->active_year) ? 'selected' : '';
+            $html .= '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
+        }
+        $html .= '</select>';
+        $html .= '</div>'; // Close month-year-dropdown
         $html .= '</div>';
-
-
-
 
         $html .= '</div>'; // Close month-year
         $html .= '</div>'; // Close header
@@ -102,22 +94,15 @@ class Calendar
             foreach ($this->events as $event) {
                 for ($d = 0; $d <= ($event['days'] - 1); $d++) {
                     $event_date = date('Y-m-d', strtotime($event['date'] . ' +' . $d . ' day'));
-            
-                    // Show events only if:
-                    // - Current role is 's' or 'a'
-                    // - Current role is 'u' and the event is assigned to the logged-in user
-                    if (
-                        ($_SESSION['role'] === 's' || $_SESSION['role'] === 'a') ||
-                        ($_SESSION['role'] === 'u' && isset($event['assigned_user']) && $event['assigned_user'] === $_SESSION['user_id'])
-                    ) {
-                        if ($formatted_date === $event_date) {
-                            $color_style = $event['color'] ? 'style="background-color:' . htmlspecialchars($event['color']) . ';"' : '';
-                            $html .= '<div class="event" ' . $color_style . '>' . htmlspecialchars($event['text']) . '</div>';
-                        }
+
+                    // Display all events regardless of roles or assignments
+                    if ($formatted_date === $event_date) {
+                        $color_style = $event['color'] ? 'style="background-color:' . htmlspecialchars($event['color']) . ';"' : '';
+                        $html .= '<div class="event" ' . $color_style . '>' . htmlspecialchars($event['text']) . '</div>';
                     }
                 }
             }
-            
+
             $html .= '</div>';
         }
 
