@@ -1,4 +1,5 @@
 <?php
+
 class Calendar
 {
     private $active_year, $active_month, $active_day;
@@ -17,13 +18,16 @@ class Calendar
         }
     }
 
-    public function add_event($txt, $date, $days = 1, $color = '')
+    public function add_event($txt, $date, $days = 1, $color = '', $assigned_user = null)
     {
-        // Only add events if the user role is 'a'
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'a' || $_SESSION['role'] === 'u') {
-            $color = $color ? ' ' . $color : $color;
-            $this->events[] = [$txt, $date, $days, $color];
-        }
+        $color = $color ? ' ' . $color : $color;
+        $this->events[] = [
+            'text' => $txt,
+            'date' => $date,
+            'days' => $days,
+            'color' => $color,
+            'assigned_user' => $assigned_user, 
+        ];
     }
 
     public function __toString()
@@ -36,6 +40,12 @@ class Calendar
         $html .= '<div class="header">';
         $html .= '<div class="month-year" id="month-year" onmouseover="showDropdown()" onmouseleave="hideDropdown()">';
         $html .= date('F Y', strtotime($this->active_year . '-' . $this->active_month));
+
+        $html .= '<div style="display: inline-flex; align-items: center;">';
+        $html .= '<a href="" title="calendar icons" target="_blank" style="font-weight: bold; color: #818589; text-decoration: none;">';
+        $html .= '<img src="../../assets/img/schedule.svg" alt="Calendar Icon" style="width:36px; height:36px; vertical-align:middle; margin-left: 5px;">';
+        $html .= '</a>';
+
         $html .= '<div id="month-year-dropdown" style="display:none;">';
 
         // Month dropdown
@@ -53,8 +63,9 @@ class Calendar
             $html .= '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
         }
         $html .= '</select>';
-
         $html .= '</div>'; // Close month-year-dropdown
+        $html .= '</div>';
+
         $html .= '</div>'; // Close month-year
         $html .= '</div>'; // Close header
 
@@ -81,14 +92,17 @@ class Calendar
 
             // Add events for the current day
             foreach ($this->events as $event) {
-                for ($d = 0; $d <= ($event[2] - 1); $d++) {
-                    $event_date = date('Y-m-d', strtotime($event[1] . ' +' . $d . ' day'));
+                for ($d = 0; $d <= ($event['days'] - 1); $d++) {
+                    $event_date = date('Y-m-d', strtotime($event['date'] . ' +' . $d . ' day'));
+
+                    // Display all events regardless of roles or assignments
                     if ($formatted_date === $event_date) {
-                        $color_style = $event[3] ? 'style="background-color:' . htmlspecialchars($event[3]) . ';"' : '';
-                        $html .= '<div class="event" ' . $color_style . '>' . htmlspecialchars($event[0]) . '</div>';
+                        $color_style = $event['color'] ? 'style="background-color:' . htmlspecialchars($event['color']) . ';"' : '';
+                        $html .= '<div class="event" ' . $color_style . '>' . htmlspecialchars($event['text']) . '</div>';
                     }
                 }
             }
+
             $html .= '</div>';
         }
 
