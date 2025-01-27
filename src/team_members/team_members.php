@@ -42,7 +42,7 @@ $result = mysqli_query($connect, $team_members_query);
 $team_members = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Fetch users with null roles for the modal
-$null_role_query = "SELECT * FROM KaajAsse.user WHERE user_role IS NULL";
+$null_role_query = "SELECT * FROM KaajAsse.user WHERE user_role IS NULL or user_role = ''";
 $null_role_result = mysqli_query($connect, $null_role_query);
 $null_users = mysqli_fetch_all($null_role_result, MYSQLI_ASSOC);
 ?>
