@@ -24,6 +24,33 @@ p{
     border-radius: 20px;
 }
 
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.score-display {
+    background: #FFF9E7;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-label {
+    color: #3E435D;
+    font-weight: bold;
+}
+
+.score-value {
+    color: #F15E29;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 
 .container {
     width: 95%;

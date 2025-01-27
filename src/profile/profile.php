@@ -36,6 +36,15 @@ if (!$user) {
     die("No user found with email: " . htmlspecialchars($user_email));
 }
 
+// Get points using user_id
+$points_query = "SELECT points FROM KaajAsse.task_leaderboard WHERE user_id = ?";
+$points_stmt = $connect->prepare($points_query);
+$points_stmt->bind_param("i", $user['user_id']); // Using integer binding for user_id
+$points_stmt->execute();
+$points_result = $points_stmt->get_result();
+$points_data = $points_result->fetch_assoc();
+$user_points = $points_data['points'] ?? 0;
+
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
@@ -78,6 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
     <div>
         <h1>Welcome, <?php echo htmlspecialchars($user['first_name']); ?></h1>
+        <div class="score-display">
+        <span class="score-label">Points:</span>
+        <span class="score-value"><?php echo htmlspecialchars($user_points); ?></span>
+    </div>
     </div>
 
 <div class="orange"></div>
