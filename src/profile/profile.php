@@ -34,22 +34,22 @@ if (!$user) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
-    $uname = trim($_POST['uname']);
+    $user_role = trim($_POST['user_role']);
 
-    if (!empty($first_name) && !empty($last_name) && !empty($uname)) {
-        $update_query = "UPDATE KaajAsse.user SET first_name = ?, last_name = ?, uname = ? WHERE LOWER(user_email) = LOWER(?)";
+    if (!empty($first_name) && !empty($last_name) && !empty($user_role)) {
+        $update_query = "UPDATE KaajAsse.user SET first_name = ?, last_name = ?, user_role = ? WHERE LOWER(user_email) = LOWER(?)";
         $update_stmt = $connect->prepare($update_query);
 
         if (!$update_stmt) {
             $error_message = "Query preparation failed: " . $connect->error;
         } else {
-            $update_stmt->bind_param("ssss", $first_name, $last_name, $uname, $user_email);
+            $update_stmt->bind_param("ssss", $first_name, $last_name, $user_role, $user_email);
 
             if ($update_stmt->execute()) {
                 $success_message = "Profile updated successfully!";
                 $user['first_name'] = $first_name;
                 $user['last_name'] = $last_name;
-                $user['uname'] = $uname;
+                $user['user_role'] = $user_role;
             } else {
                 $error_message = "Update failed: " . $update_stmt->error;
             }
