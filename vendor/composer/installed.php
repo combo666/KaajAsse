@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => '__root__',
+        'name' => 'combo666/kaajasse',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '46e91b6a447640cc30d475503deb42a239c73258',
+        'reference' => '8581bb4c7babb6c96d170fe2df7a0d01e14e0bbc',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        '__root__' => array(
+        'combo666/kaajasse' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '46e91b6a447640cc30d475503deb42a239c73258',
+            'reference' => '8581bb4c7babb6c96d170fe2df7a0d01e14e0bbc',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
