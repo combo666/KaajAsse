@@ -64,24 +64,58 @@ p{
   border: 1px solid black;
 }
 
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.score-display {
+    
+    margin-bottom: 20px;
+    padding: 10px 0px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-label {
+    color: #3E435D;
+    font-weight: bold;
+}
+
+.score-value {
+    color: #F15E29;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .profile-section .edit-btn {
     position: absolute;
     top: -17px;
     right: 20px;
-    background-color: #e03e3e;
+    background-color: #58b155;
     color: #fff;
     border: 1px solid black;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+} 
+.logout-btn {
+    background-color: #e03e3e;
+    color: white;
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+    transition: background-color 0.3s;
 }
-.logout-btn{
-    background-color: #e03e3e;
-    color: #fff;
-    border: 1px solid black;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+
+.logout-btn:hover {
+    background-color: #c82333;
 }
 
 #first-name , #last-name  {
@@ -104,6 +138,29 @@ p{
     margin-bottom: 5px;
     font-weight: bold;
 }
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+}
+
+.upload-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+}
+
 
 
 .profile-section form input,
