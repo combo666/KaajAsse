@@ -75,8 +75,8 @@ if (isset($_POST['sign-in'])) {
 
     <div class="form-section">
         <div class="signin-box">
-            <div class="bandage bandage-top-left"></div>
-            <div class="bandage bandage-top-right"></div>
+            <!-- <div class="bandage bandage-top-left"></div>
+            <div class="bandage bandage-top-right"></div> -->
 
             <div class="toggle-container">
                 <div id="btn"></div>

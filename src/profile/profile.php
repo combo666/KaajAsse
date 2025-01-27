@@ -14,6 +14,8 @@ $user_email = $_SESSION['user_email'];
 $query = "SELECT * FROM KaajAsse.user WHERE LOWER(user_email) = LOWER(?)";
 $stmt = $connect->prepare($query);
 
+
+
 if (!$stmt) {
     die("Query preparation failed: " . $connect->error);
 }
@@ -29,6 +31,15 @@ $user = $result->fetch_assoc();
 if (!$user) {
     die("No user found with email: " . htmlspecialchars($user_email));
 }
+
+// Get points using user_id
+$points_query = "SELECT points FROM KaajAsse.task_leaderboard WHERE user_id = ?";
+$points_stmt = $connect->prepare($points_query);
+$points_stmt->bind_param("i", $user['user_id']); // Using integer binding for user_id
+$points_stmt->execute();
+$points_result = $points_stmt->get_result();
+$points_data = $points_result->fetch_assoc();
+$user_points = $points_data['points'] ?? 0;
 
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
@@ -82,7 +93,7 @@ if (isset($_POST['logout'])) {
 ?>
 
 <div>
-    <h1>Welcome, <?php echo htmlspecialchars($user['first_name'] . ' '. $user['last_name']); ?></h1>
+    <h1>Welcome, <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h1>
 </div>
 
 <div class="orange"></div>
@@ -115,9 +126,15 @@ if (isset($_POST['logout'])) {
         <div class="form-group">
             <label for="user_role">User Role</label>
             <input type="text" id="user_role" name="user_role"
-                value="<?php echo htmlspecialchars($user['user_role']); ?>"
+                value="<?php
+                        $role = $user['user_role'];
+                        echo htmlspecialchars(
+                            $role === 'a' ? 'Admin' : ($role === 'u' ? 'User' : ($role === 's' ? 'Super Admin' : 'Unknown'))
+                        );
+                        ?>"
                 class="form-input" readonly>
         </div>
+
         <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email"
@@ -129,6 +146,11 @@ if (isset($_POST['logout'])) {
             <button type="submit" name="update_profile" class="btn update-btn">Update Profile</button>
         </div>
     </form>
+
+    <div class="score-display">
+        <span class="score-label">Points:</span>
+        <span class="score-value"><?php echo htmlspecialchars($user_points); ?></span>
+    </div>
 
     <form method="POST" class="logout-form">
         <button type="submit" name="logout" class="logout-btn">Log Out</button>
