@@ -4,7 +4,7 @@ if (isset($_POST['sign-in'])) {
     $email = mysqli_real_escape_string($connect, $_POST['email']);
     $password = md5($_POST['password']);
 
-    $select = "SELECT * FROM KaajAsse.user WHERE LOWER(user_email) = LOWER(?)";
+    $select = " SELECT * FROM KaajAsse.user WHERE user_email = '$email';";
     $result = mysqli_query($connect, $select);
     // echo $result;
     if (mysqli_num_rows($result) > 0) {
