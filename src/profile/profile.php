@@ -14,6 +14,12 @@ $user_email = $_SESSION['user_email'];
 $query = "SELECT * FROM KaajAsse.user WHERE LOWER(user_email) = LOWER(?)";
 $stmt = $connect->prepare($query);
 
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: ../login/login_reg.php');
+    exit();
+}
+
 if (!$stmt) {
     die("Query preparation failed: " . $connect->error);
 }
@@ -84,6 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <?php if (isset($error_message)): ?>
         <div class="alert error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
+    <form method="POST" class="logout-form">
+        <button type="submit" name="logout" class="logout-btn">Logout</button>
+    </form>
 
     <button class="edit-btn" onclick="toggleEdit()">Edit</button>
 <img src="../../assets/img/profile.png" class="profile-img" alt="">

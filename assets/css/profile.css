@@ -193,3 +193,22 @@ p{
 }
 
 
+.logout-form {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
