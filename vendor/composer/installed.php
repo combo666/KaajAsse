@@ -3,7 +3,7 @@
         'name' => 'combo666/kaajasse',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8581bb4c7babb6c96d170fe2df7a0d01e14e0bbc',
+        'reference' => '004e44b6510bcd60994c5d6f06c3c29cf1aac2f7',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'combo666/kaajasse' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8581bb4c7babb6c96d170fe2df7a0d01e14e0bbc',
+            'reference' => '004e44b6510bcd60994c5d6f06c3c29cf1aac2f7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

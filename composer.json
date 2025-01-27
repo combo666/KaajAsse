@@ -2,7 +2,8 @@
     "name": "combo666/kaajasse",
     "description": "A project to manage KaajAsse functionality.",
     "require": {
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "symfony/polyfill-php80": "^1.31"
     },
     "license": "proprietary",
     "minimum-stability": "stable",
