@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between cards */
+    justify-content: space-around; /* Center and spread cards evenly */
+    padding: 40px 20px;
+}
+
+.card {
+    width: 100px; /* Fixed width for 4 cards per row */
+    min-width: 250px; /* Minimum size for smaller screens */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    color: #333;
+    font-family: Arial, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h4 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #fff;
+}
+
+.card h2 {
+    margin: 5px 0 10px;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.card p {
+    margin: 10px 0 5px;
+    font-size: 1em;
+    font-weight: 400;
+    color: #fff;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #fff;
+}
+
+.card-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.blue {
+    background-color: #4f8ff7;
+}
+
+.green {
+    background-color: #4caf50;
+}
+
+.orange {
+    background-color: #ff9800;
+}
+
+.red {
+    background-color: #f44336;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 45%; /* Two cards per row on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 80%; /* Full-width cards on small screens */
+    }
+}
