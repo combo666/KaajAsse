@@ -14,6 +14,12 @@ $user_email = $_SESSION['user_email'];
 $query = "SELECT * FROM KaajAsse.user WHERE LOWER(user_email) = LOWER(?)";
 $stmt = $connect->prepare($query);
 
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: ../login/login_reg.php');
+    exit();
+}
+
 if (!$stmt) {
     die("Query preparation failed: " . $connect->error);
 }
@@ -30,26 +36,35 @@ if (!$user) {
     die("No user found with email: " . htmlspecialchars($user_email));
 }
 
+// Get points using user_id
+$points_query = "SELECT points FROM KaajAsse.task_leaderboard WHERE user_id = ?";
+$points_stmt = $connect->prepare($points_query);
+$points_stmt->bind_param("i", $user['user_id']); // Using integer binding for user_id
+$points_stmt->execute();
+$points_result = $points_stmt->get_result();
+$points_data = $points_result->fetch_assoc();
+$user_points = $points_data['points'] ?? 0;
+
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
-    $uname = trim($_POST['uname']);
+    $user_role = trim($_POST['user_role']);
 
-    if (!empty($first_name) && !empty($last_name) && !empty($uname)) {
-        $update_query = "UPDATE KaajAsse.user SET first_name = ?, last_name = ?, uname = ? WHERE LOWER(user_email) = LOWER(?)";
+    if (!empty($first_name) && !empty($last_name) && !empty($user_role)) {
+        $update_query = "UPDATE KaajAsse.user SET first_name = ?, last_name = ?, user_role = ? WHERE LOWER(user_email) = LOWER(?)";
         $update_stmt = $connect->prepare($update_query);
 
         if (!$update_stmt) {
             $error_message = "Query preparation failed: " . $connect->error;
         } else {
-            $update_stmt->bind_param("ssss", $first_name, $last_name, $uname, $user_email);
+            $update_stmt->bind_param("ssss", $first_name, $last_name, $user_role, $user_email);
 
             if ($update_stmt->execute()) {
                 $success_message = "Profile updated successfully!";
                 $user['first_name'] = $first_name;
                 $user['last_name'] = $last_name;
-                $user['uname'] = $uname;
+                $user['user_role'] = $user_role;
             } else {
                 $error_message = "Update failed: " . $update_stmt->error;
             }
@@ -72,6 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
     <div>
         <h1>Welcome, <?php echo htmlspecialchars($user['first_name']); ?></h1>
+        <div class="score-display">
+        <span class="score-label">Points:</span>
+        <span class="score-value"><?php echo htmlspecialchars($user_points); ?></span>
+    </div>
     </div>
 
 <div class="orange"></div>
@@ -84,6 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <?php if (isset($error_message)): ?>
         <div class="alert error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
+    <form method="POST" class="logout-form">
+        <button type="submit" name="logout" class="logout-btn">Logout</button>
+    </form>
 
     <button class="edit-btn" onclick="toggleEdit()">Edit</button>
 <img src="../../assets/img/profile.png" class="profile-img" alt="">
