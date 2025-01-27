@@ -52,6 +52,14 @@
 
                 <label for="task_color">Task Color:</label>
                 <input type="color" id="task_color" name="task_color" value="#cab64e">
+
+                <!-- Priority Dropdown -->
+                <label for="task_priority">Task Priority:</label>
+                <select id="task_priority" name="task_priority">
+                    <option value="low" selected>Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
             </div>
 
             <label for="assigned_user">Assigned User:</label>

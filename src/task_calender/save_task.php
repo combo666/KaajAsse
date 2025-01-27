@@ -22,6 +22,7 @@ $task_date = $_POST['task_date'] ?? null;
 $task_duration = $_POST['task_duration'] ?? null;
 $task_description = $_POST['task_description'] ?? null;
 $task_color = $_POST['task_color'] ?? null;
+$task_priority = $_POST['task_priority'] ?? 'low'; // Default to 'low' if not provided
 $assigned_users = $_POST['assigned_user'] ?? [];
 
 try {
@@ -44,11 +45,11 @@ try {
             exit;
         }
     
-        // Insert the new task into `task_calendar`
+        // Insert the new task into `task_calendar` with default status 'backlog'
         $insert_task_query = "INSERT INTO KaajAsse.task_calendar (task_name, task_start_date, task_duration, task_description, task_color, task_priority, task_status)
-                              VALUES (?, ?, ?, ?, ?, 'low', 'todo')";
+                              VALUES (?, ?, ?, ?, ?, ?, 'backlog')";
         $stmt = $connect->prepare($insert_task_query);
-        $stmt->bind_param("ssiss", $new_task_name, $task_date, $task_duration, $task_description, $task_color);
+        $stmt->bind_param("ssisss", $new_task_name, $task_date, $task_duration, $task_description, $task_color, $task_priority);
         $stmt->execute();
     
         // Get the newly inserted task ID
