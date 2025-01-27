@@ -14,12 +14,6 @@ $user_email = $_SESSION['user_email'];
 $query = "SELECT * FROM KaajAsse.user WHERE LOWER(user_email) = LOWER(?)";
 $stmt = $connect->prepare($query);
 
-if (isset($_POST['logout'])) {
-    session_destroy();
-    header('Location: ../login/login_reg.php');
-    exit();
-}
-
 if (!$stmt) {
     die("Query preparation failed: " . $connect->error);
 }
@@ -36,62 +30,60 @@ if (!$user) {
     die("No user found with email: " . htmlspecialchars($user_email));
 }
 
-// Get points using user_id
-$points_query = "SELECT points FROM KaajAsse.task_leaderboard WHERE user_id = ?";
-$points_stmt = $connect->prepare($points_query);
-$points_stmt->bind_param("i", $user['user_id']); // Using integer binding for user_id
-$points_stmt->execute();
-$points_result = $points_stmt->get_result();
-$points_data = $points_result->fetch_assoc();
-$user_points = $points_data['points'] ?? 0;
-
 // Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
-    $user_role = trim($_POST['user_role']);
 
-    if (!empty($first_name) && !empty($last_name) && !empty($user_role)) {
-        $update_query = "UPDATE KaajAsse.user SET first_name = ?, last_name = ?, user_role = ? WHERE LOWER(user_email) = LOWER(?)";
-        $update_stmt = $connect->prepare($update_query);
+    // Only update the fields provided by the user
+    $update_query = "UPDATE KaajAsse.user SET";
+    $params = [];
+    $types = "";
 
-        if (!$update_stmt) {
-            $error_message = "Query preparation failed: " . $connect->error;
-        } else {
-            $update_stmt->bind_param("ssss", $first_name, $last_name, $user_role, $user_email);
-
-            if ($update_stmt->execute()) {
-                $success_message = "Profile updated successfully!";
-                $user['first_name'] = $first_name;
-                $user['last_name'] = $last_name;
-                $user['user_role'] = $user_role;
-            } else {
-                $error_message = "Update failed: " . $update_stmt->error;
-            }
-        }
-    } else {
-        $error_message = "All fields must be filled out.";
+    if (!empty($first_name)) {
+        $update_query .= " first_name = ?,";
+        $params[] = $first_name;
+        $types .= "s";
     }
+
+    if (!empty($last_name)) {
+        $update_query .= " last_name = ?,";
+        $params[] = $last_name;
+        $types .= "s";
+    }
+
+    // Remove the trailing comma and add the WHERE clause
+    $update_query = rtrim($update_query, ',') . " WHERE LOWER(user_email) = LOWER(?)";
+    $params[] = $user_email;
+    $types .= "s";
+
+    $update_stmt = $connect->prepare($update_query);
+
+    if (!$update_stmt) {
+        $error_message = "Query preparation failed: " . $connect->error;
+    } else {
+        $update_stmt->bind_param($types, ...$params);
+
+        if ($update_stmt->execute()) {
+            if (!empty($first_name)) $user['first_name'] = $first_name;
+            if (!empty($last_name)) $user['last_name'] = $last_name;
+        } else {
+        }
+    }
+}
+
+// Handle logout
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: ../../index.php");
+    exit();
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
-</head>
-<body>
-
-    <div>
-        <h1>Welcome, <?php echo htmlspecialchars($user['first_name']); ?></h1>
-        <div class="score-display">
-        <span class="score-label">Points:</span>
-        <span class="score-value"><?php echo htmlspecialchars($user_points); ?></span>
-    </div>
-    </div>
+<div>
+    <h1>Welcome, <?php echo htmlspecialchars($user['first_name'] . ' '. $user['last_name']); ?></h1>
+</div>
 
 <div class="orange"></div>
 
@@ -103,80 +95,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <?php if (isset($error_message)): ?>
         <div class="alert error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
-    <form method="POST" class="logout-form">
-        <button type="submit" name="logout" class="logout-btn">Logout</button>
-    </form>
 
     <button class="edit-btn" onclick="toggleEdit()">Edit</button>
-<img src="../../assets/img/profile.png" class="profile-img" alt="">
+    <img src="../../assets/img/profile.png" class="profile-img" alt="">
 
-<form method="POST" id="profileForm">
-    <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input type="text" id="first-name" name="first_name" 
-               value="<?php echo htmlspecialchars($user['first_name']); ?>" 
-               readonly required>
-    </div>
-    <div class="form-group">
-        <label for="last-name">Last Name</label>
-        <input type="text" id="last-name" name="last_name" 
-               value="<?php echo htmlspecialchars($user['last_name']); ?>" 
-               readonly required>
-    </div>
-    <div class="form-group">
-        <label for="user_role">User Role</label>
-        <input type="text" id="user_role" name="user_role" 
-               value="<?php echo htmlspecialchars($user['user_role']); ?>" 
-               class="form-input" readonly>
-    </div>
-    <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email"
-               value="<?php echo htmlspecialchars($user['user_email']); ?>" 
-               class="form-input" readonly>
-    </div>
-    <div class="form-actions" style="display: none;">
-        <button type="button" onclick="cancelEdit()" class="btn cancel-btn">Cancel</button>
-        <button type="submit" name="update_profile" class="btn update-btn">Update Profile</button>
-    </div>
-</form>
+    <form method="POST" id="profileForm">
+        <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name"
+                value="<?php echo htmlspecialchars($user['first_name']); ?>"
+                readonly>
+        </div>
+        <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name"
+                value="<?php echo htmlspecialchars($user['last_name']); ?>"
+                readonly>
+        </div>
+        <div class="form-group">
+            <label for="user_role">User Role</label>
+            <input type="text" id="user_role" name="user_role"
+                value="<?php echo htmlspecialchars($user['user_role']); ?>"
+                class="form-input" readonly>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email"
+                value="<?php echo htmlspecialchars($user['user_email']); ?>"
+                class="form-input" readonly>
+        </div>
+        <div class="form-actions" style="display: none;">
+            <button type="button" onclick="cancelEdit()" class="btn cancel-btn">Cancel</button>
+            <button type="submit" name="update_profile" class="btn update-btn">Update Profile</button>
+        </div>
+    </form>
+
+    <form method="POST" class="logout-form">
+        <button type="submit" name="logout" class="logout-btn">Log Out</button>
+    </form>
+</div>
 
 <script>
-function toggleEdit() {
-    const form = document.getElementById('profileForm');
-    const firstNameInput = document.getElementById('first-name');
-    const lastNameInput = document.getElementById('last-name');
-    const formActions = form.querySelector('.form-actions');
-    
-    firstNameInput.readOnly = !firstNameInput.readOnly;
-    lastNameInput.readOnly = !lastNameInput.readOnly;
-    
-    formActions.style.display = firstNameInput.readOnly ? 'none' : 'flex';
-}
+    function toggleEdit() {
+        const form = document.getElementById('profileForm');
+        const inputs = form.querySelectorAll('input:not([type="email"]):not([name="user_role"])');
+        const formActions = form.querySelector('.form-actions');
 
-function cancelEdit() {
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input:not([type="email"]):not([name="user_role"])');
-    const formActions = form.querySelector('.form-actions');
-    
-    inputs.forEach(input => {
-        input.readOnly = true;
-        input.value = input.defaultValue;
-    });
-    
-    formActions.style.display = 'none';
-}
+        inputs.forEach(input => {
+            input.readOnly = !input.readOnly;
+        });
+
+        formActions.style.display = inputs[0].readOnly ? 'none' : 'flex';
+    }
+
+    function cancelEdit() {
+        const form = document.getElementById('profileForm');
+        const inputs = form.querySelectorAll('input:not([type="email"]):not([name="user_role"])');
+        const formActions = form.querySelector('.form-actions');
+
+        inputs.forEach(input => {
+            input.readOnly = true;
+            input.value = input.defaultValue;
+        });
+
+        formActions.style.display = 'none';
+    }
 </script>
-
-    <div class="email-section">
-        <p>My email address</p>
-        <p><?php echo htmlspecialchars($user['user_email']); ?></p>
-        <button>Add Email Address</button>
-    </div>
-</div>
 
 <?php include('../../examples/includes/navbar.php'); ?>
 <?php include('../../examples/includes/footer.php'); ?>
-
-</body>
-</html>

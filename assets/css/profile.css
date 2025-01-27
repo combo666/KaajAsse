@@ -24,33 +24,6 @@ p{
     border-radius: 20px;
 }
 
-.header-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.score-display {
-    background: #FFF9E7;
-    padding: 10px 20px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.score-label {
-    color: #3E435D;
-    font-weight: bold;
-}
-
-.score-value {
-    color: #F15E29;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
 
 .container {
     width: 95%;
@@ -97,7 +70,15 @@ p{
     right: 20px;
     background-color: #e03e3e;
     color: #fff;
-    border: none;
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.logout-btn{
+    background-color: #e03e3e;
+    color: #fff;
+    border: 1px solid black;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -219,23 +200,3 @@ p{
     display: none;
 }
 
-
-.logout-form {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-}
-
-.logout-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.logout-btn:hover {
-    background-color: #c82333;
-}
