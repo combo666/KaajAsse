@@ -62,14 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Render page for GET request (Normal page load)
-if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
+if (isset($_SESSION['user_id'], $_SESSION['uname'], $_SESSION['user_role'])) {
     $user_id = mysqli_real_escape_string($connect, $_SESSION['user_id']);
+    $user_role = $_SESSION['user_role'];
 
-    // Fetch tasks assigned to the logged-in user
-    $query = "SELECT tc.* 
-              FROM KaajAsse.task_calendar tc
-              JOIN KaajAsse.task_user tu ON tc.task_id = tu.task_id
-              WHERE tu.user_id = $user_id";
+    // Fetch tasks based on role
+    if ($user_role === 'a' || $user_role === 's') {
+        // Admin and Super Admin can see all tasks
+        $query = "SELECT * FROM KaajAsse.task_calendar";
+    } else {
+        // Regular users see only their assigned tasks
+        $query = "SELECT tc.* 
+                  FROM KaajAsse.task_calendar tc
+                  JOIN KaajAsse.task_user tu ON tc.task_id = tu.task_id
+                  WHERE tu.user_id = $user_id";
+    }
     $result = mysqli_query($connect, $query);
 
     $tasks = [];
