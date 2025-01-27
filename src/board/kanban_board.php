@@ -12,15 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($taskId && $newStatus) {
         $updateQuery = "UPDATE KaajAsse.task_calendar SET task_status = '$newStatus' WHERE task_id = '$taskId'";
         mysqli_query($connect, $updateQuery);
-        // echo "Task ID $taskId status changed to '$newStatus'.";
+        exit;
     }
-    exit;
 }
 
 // Render page for GET request (Normal page load)
 if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
     $user_id = mysqli_real_escape_string($connect, $_SESSION['user_id']);
-    $query = "SELECT * FROM KaajAsse.task_calendar WHERE assigned_user = $user_id";
+
+    // Fetch tasks assigned to the logged-in user
+    $query = "SELECT tc.* 
+              FROM KaajAsse.task_calendar tc
+              JOIN KaajAsse.task_user tu ON tc.task_id = tu.task_id
+              WHERE tu.user_id = $user_id";
     $result = mysqli_query($connect, $query);
 
     $tasks = [];
@@ -30,11 +34,8 @@ if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
 }
 ?>
 
-<!-- <div class="controls">
-    <button class="control-btn">✏️ Create Task</button>
-    <button class="control-btn trash-btn">🗑️ Trashed Tasks</button>
-</div> -->
-
+<h1 style="margin-bottom: 10px;">Kanban Board</h1>
+<hr style="margin-bottom: 20px;">
 <div class="kanban-board">
     <?php
     $statuses = ['backlog', 'todo', 'inprogress', 'done'];
@@ -45,9 +46,10 @@ if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
         if (!empty($tasks[$status])) {
             foreach ($tasks[$status] as $task) {
                 echo "<div class='task' draggable='true' data-id='{$task['task_id']}'>";
-                echo "<p class='priority'>{$task['task_priority']} Priority</p>";
+                echo "<p class='priority {$task['task_priority']}'>{$task['task_priority']} Priority</p>";
                 echo "<p class='task-title'>{$task['task_name']}</p>";
-                echo "<p class='date'>{$task['task_start_date']}</p>";
+                echo "<p class='date'> Start Date: {$task['task_start_date']}</p>";
+                echo "<p> Duration: {$task['task_duration']} day(s)</p>";
                 echo "</div>";
             }
         }
@@ -57,14 +59,10 @@ if (isset($_SESSION['user_id'], $_SESSION['uname'])) {
     ?>
 </div>
 
-<!-- <p id="status-message"></p> -->
-
 <script>
 const tasks = document.querySelectorAll('.task');
 const columns = document.querySelectorAll('.kanban-column');
-// const statusMessage = document.getElementById('status-message');
 
-// Allow dragging
 tasks.forEach(task => {
     task.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', e.target.dataset.id);
@@ -77,7 +75,6 @@ tasks.forEach(task => {
     });
 });
 
-// Allow dropping into columns
 columns.forEach(column => {
     column.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -103,12 +100,7 @@ columns.forEach(column => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: taskId, status: newStatus })
             })
-            // .then(response => response.text())
-            // .then(message => {
-            //     statusMessage.textContent = message;
-            // })
             .catch(error => {
-                // statusMessage.textContent = 'Error updating status.';
                 console.error(error);
             });
         }

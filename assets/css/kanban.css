@@ -50,6 +50,22 @@
     border-radius: 5px;
 }
 
+.priority.low {
+    background-color: #D4F5A4;
+    color: black;
+}
+
+.priority.medium {
+    background-color: #A4D2DF;
+    color: black;
+
+}
+
+.priority.high {
+    background-color: #FF2B14;
+    color: black;
+}
+
 .backlog {
     background-color: #b3c7f3;
 }
