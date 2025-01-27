@@ -12,8 +12,12 @@
             session_start();
         }
 
+        date_default_timezone_set('Asia/Dhaka');
+
+
         // Get the current user's email from the session
         $current_user_email = $_SESSION['user_email'] ?? null;
+        date_default_timezone_set('Asia/Dhaka');
 
         if (!$current_user_email) {
             echo '<p>Error: User is not logged in.</p>';
@@ -33,7 +37,7 @@
             INNER JOIN KaajAsse.task_calendar tc ON tu.task_id = tc.task_id
             INNER JOIN KaajAsse.user u ON tu.user_id = u.user_id
             WHERE u.user_email = ?
-            AND tc.task_start_date = CURDATE()
+            AND tc.task_start_date = ?
             ORDER BY FIELD(tc.task_priority, 'high', 'medium', 'low')";
 
         // Prepare the SQL statement
@@ -43,8 +47,9 @@
             exit;
         }
 
+        $current_date = date('Y-m-d');
         // Bind the email parameter
-        $stmt->bind_param('s', $current_user_email);
+        $stmt->bind_param('ss', $current_user_email, $current_date);
         
 
         // Execute the query
@@ -58,9 +63,9 @@
 
         // Priority color mapping
         $priority_colors = [
-            'high' => '#FF2B14', // Red for high priority
-            'medium' => '#A4D2DF', // Yellow for medium priority
-            'low' => '#D4F5A4' // Green for low priority
+            'high' => '#FF2B14', 
+            'medium' => '#A4D2DF', 
+            'low' => '#D4F5A4'
         ];
 
         // Check if any tasks are available for today

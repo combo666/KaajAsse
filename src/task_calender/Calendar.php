@@ -5,8 +5,10 @@ class Calendar
     private $active_year, $active_month, $active_day;
     private $events = [];
 
+
     public function __construct($date = null)
     {
+        date_default_timezone_set('Asia/Dhaka');
         if (isset($_GET['month']) && isset($_GET['year'])) {
             $this->active_month = $_GET['month'];
             $this->active_year = $_GET['year'];
@@ -26,7 +28,7 @@ class Calendar
             'date' => $date,
             'days' => $days,
             'color' => $color,
-            'assigned_user' => $assigned_user, 
+            'assigned_user' => $assigned_user,
         ];
     }
 
@@ -38,18 +40,15 @@ class Calendar
 
         $html = '<div class="calendar">';
         $html .= '<div class="header">';
-        $html .= '<div class="month-year" id="month-year" onmouseover="showDropdown()" onmouseleave="hideDropdown()">';
+        $html .= '<div class="month-year" id="month-year">';
         $html .= date('F Y', strtotime($this->active_year . '-' . $this->active_month));
 
         $html .= '<div style="display: inline-flex; align-items: center;">';
-        $html .= '<a href="" title="calendar icons" target="_blank" style="font-weight: bold; color: #818589; text-decoration: none;">';
-        $html .= '<img src="../../assets/img/schedule.svg" alt="Calendar Icon" style="width:36px; height:36px; vertical-align:middle; margin-left: 5px;">';
-        $html .= '</a>';
 
-        $html .= '<div id="month-year-dropdown" style="display:none;">';
+        $html .= '<div id="month-year" style="">';
 
         // Month dropdown
-        $html .= '<select id="month-select" onchange="updateCalendar()">';
+        $html .= '<select id="month-select" onchange="updateCalendar()" style="margin-right: 10px; margin-left: 10px;">';
         for ($m = 1; $m <= 12; $m++) {
             $selected = ($m == $this->active_month) ? 'selected' : '';
             $html .= '<option value="' . $m . '" ' . $selected . '>' . date('F', mktime(0, 0, 0, $m, 10)) . '</option>';
@@ -57,12 +56,13 @@ class Calendar
         $html .= '</select>';
 
         // Year dropdown
-        $html .= '<select id="year-select" onchange="updateCalendar()">';
+        $html .= '<select id="year-select" onchange="updateCalendar()" style="margin-left: 10px;">'; // Add margin-left here
         for ($y = date('Y') - 5; $y <= date('Y') + 5; $y++) {
             $selected = ($y == $this->active_year) ? 'selected' : '';
             $html .= '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
         }
         $html .= '</select>';
+
         $html .= '</div>'; // Close month-year-dropdown
         $html .= '</div>';
 

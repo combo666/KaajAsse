@@ -143,6 +143,20 @@
     background-color: #ffd90048;
     cursor: pointer;
 }
+#month-select, #year-select {
+    background-color: inherit;
+    border: 1px solid #ccc;
+    color: inherit;
+    outline: none;
+    cursor: pointer;
+}
+
+#month-select:hover, #year-select:hover {
+    background-color: inherit;
+    border-color: #ccc;
+    color: inherit;
+    cursor: pointer;
+}
 
 
 /* todays's_task_container */
@@ -214,7 +228,8 @@
     }
     .task_name{
         font-size: large;
-        font: bold;
+        color: #333;
+        font: bolder;
         margin: 8px;
     }
     .task_note{
@@ -271,9 +286,6 @@
 
 
 
-
-
-
 /* Popup Modal */
 .modal {
     display: none;
@@ -289,15 +301,15 @@
 }
 
 .modal-content {
-    background: #ffffff; /* Clean white background */
+    background: #656565; 
     padding: 25px;
     
     transform: translate(0%, -10%);
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* More subtle shadow */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); 
     width: 90%;
-    max-width: 450px; /* Slightly narrower for a sleek look */
-    animation: fadeIn 0.3s ease; /* Smooth fade-in animation */
+    max-width: 450px; 
+    animation: fadeIn 0.3s ease; 
     
 }
 
