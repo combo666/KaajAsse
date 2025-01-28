@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
     $assign_role = 'u';
     $query = "UPDATE KaajAsse.user SET user_role = '$assign_role' WHERE user_id = '$user_id' AND user_role IS NULL";
     mysqli_query($connect, $query);
+    $leaderboard_query = "INSERT INTO KaajAsse.task_leaderboard (user_id, points) VALUES ('$user_id', 0)";
+    mysqli_query($connect, $leaderboard_query);
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
