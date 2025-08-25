@@ -1,17 +1,25 @@
 <?php
 include '../../conf/database/db_connect.php';
-if (isset($_POST['sign-in'])) {
-    $email = mysqli_real_escape_string($connect, $_POST['email']);
-    $password = md5($_POST['password']);
 
-    $select = " SELECT * FROM KaajAsse.user WHERE user_email = '$email';";
-    $result = mysqli_query($connect, $select);
-    // echo $result;
-    if (mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-        if ($password == $user['user_pass']) {
+// Use prepared statements and PHP password hashing for secure auth
+if (isset($_POST['sign-in'])) {
+    $email = trim($_POST['email']);
+    $passwordInput = $_POST['password'];
+
+    // Prepared statement to fetch user by email
+    $stmt = mysqli_prepare($connect, "SELECT user_id, user_email, user_pass, user_role, first_name, last_name FROM KaajAsse.user WHERE user_email = ?");
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($user = mysqli_fetch_assoc($result)) {
+        $storedHash = $user['user_pass'];
+
+        // Modern verification
+        if (password_verify($passwordInput, $storedHash)) {
             session_start();
-            $_SESSION['user_id'] = $user['user_id']; 
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_email'] = $user['user_email'];
             $_SESSION['user_role'] = $user['user_role'];
             $_SESSION['uname'] = $user['first_name'] . " " . $user['last_name'];
@@ -20,36 +28,73 @@ if (isset($_POST['sign-in'])) {
             exit();
 
         } else {
+            // Legacy fallback for old md5-hashed passwords: re-hash on successful match
+            if (strlen($storedHash) === 32 && md5($passwordInput) === $storedHash) {
+                // Re-hash with password_hash
+                $newHash = password_hash($passwordInput, PASSWORD_DEFAULT);
+                $updateStmt = mysqli_prepare($connect, "UPDATE KaajAsse.user SET user_pass = ? WHERE user_id = ?");
+                mysqli_stmt_bind_param($updateStmt, 'si', $newHash, $user['user_id']);
+                mysqli_stmt_execute($updateStmt);
+
+                session_start();
+                session_regenerate_id(true);
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['user_email'] = $user['user_email'];
+                $_SESSION['user_role'] = $user['user_role'];
+                $_SESSION['uname'] = $user['first_name'] . " " . $user['last_name'];
+
+                header("Location: ../dashboard/dashboard.php");
+                exit();
+            }
+
             echo "Wrong password!";
         }
 
     } else {
         echo "User not found!";
     }
+
+    mysqli_stmt_close($stmt);
+
 } else if (isset($_POST["sign-up"])) {
-    $fname = mysqli_real_escape_string($connect, $_POST['fname']);
-    $lname = mysqli_real_escape_string($connect, $_POST['lname']);
-    $email = mysqli_real_escape_string($connect, $_POST['email']);
-    $pass = md5($_POST['password']);
-    $cpass = md5($_POST['cpassword']);
+    $fname = trim($_POST['fname']);
+    $lname = trim($_POST['lname']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $cpassword = $_POST['cpassword'];
 
-    $select = " SELECT * FROM KaajAsse.user WHERE user_email = '$email' && user_pass = '$pass' ";
+    $errors = [];
 
-    $result = mysqli_query($connect, $select);
+    if ($password !== $cpassword) {
+        $errors[] = 'Passwords did not match!';
+    }
 
-    if (mysqli_num_rows($result) > 0) {
+    // Check if email already exists
+    $checkStmt = mysqli_prepare($connect, "SELECT user_id FROM KaajAsse.user WHERE user_email = ?");
+    mysqli_stmt_bind_param($checkStmt, 's', $email);
+    mysqli_stmt_execute($checkStmt);
+    $checkRes = mysqli_stmt_get_result($checkStmt);
 
-        $error[] = 'user already exist!';
+    if (mysqli_num_rows($checkRes) > 0) {
+        $errors[] = 'User already exists!';
+    }
 
-    } else {
+    mysqli_stmt_close($checkStmt);
 
-        if ($pass != $cpass) {
-            $error[] = 'passwords did not match!';
-        } else {
-            $insert = "INSERT INTO KaajAsse.user(first_name, last_name, user_email, user_pass) VALUES('$fname','$lname','$email','$pass')";
-            mysqli_query($connect, $insert);
+    if (empty($errors)) {
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $insertStmt = mysqli_prepare($connect, "INSERT INTO KaajAsse.user (first_name, last_name, user_email, user_pass) VALUES (?, ?, ?, ?)");
+        mysqli_stmt_bind_param($insertStmt, 'ssss', $fname, $lname, $email, $passwordHash);
+        $ok = mysqli_stmt_execute($insertStmt);
+        mysqli_stmt_close($insertStmt);
+
+        if ($ok) {
             echo "Now Login";
+        } else {
+            echo "Registration failed.";
         }
+    } else {
+        foreach ($errors as $err) echo htmlspecialchars($err) . "<br>";
     }
 }
 
